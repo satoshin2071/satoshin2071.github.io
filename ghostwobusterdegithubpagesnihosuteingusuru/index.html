@@ -1,0 +1,282 @@
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>GhostをBusterでGithubPagesにホスティングする</title>
+    <meta name="description" content="">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="../favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=ba478f2958">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,400">
+
+    <meta name="generator" content="Ghost 0.5">
+<link rel="alternate" type="application/rss+xml" title="SatoshiN Blog" href="../rss/index.html">
+<link rel="canonical" href="index.html">
+</head>
+<body class="post-template">
+
+    
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="../">Home</a>
+        <a class="subscribe-button icon-feed" href="../rss/index.rss">Subscribe</a>
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">GhostをBusterでGithubPagesにホスティングする</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2015-10-30">30 October 2015</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <h2 id="">概要</h2>
+
+<p>Ghost を Buster を利用して静的なサイトとして吐き出して Github Pagesでホスティングする手順と運用方法</p>
+
+<h2 id="ghost">なぜGhostか</h2>
+
+<p>HugoやOctopressなど色々試した結果、最終的にGhostで落ち着きました。</p>
+
+<p>Hugoも導入はラクチンでしたがGhostは管理画面が使いやすいのが決め手でした。</p>
+
+<h2 id="">環境</h2>
+
+<pre><code>OSX Yosemite 10.10.5
+
+% brew -v
+Homebrew 0.9.5  
+% node -v
+v0.10.33  
+% npm -v
+2.1.6  
+</code></pre>
+
+<h2 id="">手順</h2>
+
+<h3 id="nodejs">node.jsのインストール</h3>
+
+<p>wgetはお好みで。</p>
+
+<pre><code>% brew install node
+% brew install wget
+</code></pre>
+
+<h3 id="ghost">Ghostのインストールと起動</h3>
+
+<pre><code>% mkdir ghost
+% cd ghost
+% wget --no-check-certificate https://ghost.org/zip/ghost-0.5.2.zip
+% unzip ghost-0.5.2.zip
+% npm install --production
+% npm start
+</code></pre>
+
+<p>sqlite3のエラーが出る場合は後述。</p>
+
+<h3 id="ghost">Ghostにログイン</h3>
+
+<p><code>http://localhost:2368/ghost</code> でアカウント設定を行い、管理画面へログインできる。</p>
+
+<h3 id="githubpages">GitHubPagesにレポジトリの作成</h3>
+
+<ol>
+<li>GiHubにアクセス  </li>
+<li>+new repositoryをぽちっと  </li>
+<li><code>username/username.github.io</code>のレポジトリを作成</li>
+</ol>
+
+<h3 id="ghostclone">Ghostのディレクトリに作成したレポジトリをcloneする</h3>
+
+<pre><code>% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git ./static
+</code></pre>
+
+<h3 id="buster">Busterのインストール</h3>
+
+<p>Ghostを静的ページとしてstaticディレクトリ以下に吐き出すためのツールとして<code>buster</code>をインストールする。</p>
+
+<p><code>npm start</code>で起動させたGhostはそのままにしてターミナルで新しいタブを開いて作業を行う。</p>
+
+<pre><code>% brew install python
+% sudo pip install buster
+</code></pre>
+
+<h3 id="buster">Busterの出力元ディレクトリとデプロイ先を設定</h3>
+
+<pre><code>% buster setup --gh-repo=git@github.com:username/username.github.io.git static
+</code></pre>
+
+<h3 id="ghostbuster">Ghost Buster !!</h3>
+
+<p>Ghostの内容をstatic以下にBusterする。</p>
+
+<p><code>buster deploy</code>コマンドで指定したデプロイ先にpushするまでを行ってくれる。</p>
+
+<pre><code>% pwd /Users/username/ghost
+% buster generate --domain=http://localhost:2368
+% buster preview  #browse http://localhost:9000
+% buster deploy
+Good job! Deployed to Github Pages.  
+</code></pre>
+
+<h3 id="">確認</h3>
+
+<p><a href="https://satoshin2071.github.io/">生成されたページ</a></p>
+
+<h2 id="">運用方法</h2>
+
+<h3 id="staticbitbucket">staticディレクトリは以外はbitbucketで管理する</h3>
+
+<pre><code>% rm -rf static
+% git init
+% git remote add origin bitbucketの管理用リポジトリ
+% git add -A
+% git commit -m 'add'
+% git push -u origin master
+</code></pre>
+
+<h3 id="staticsubmodule">staticディレクトリをsubmoduleとして管理する</h3>
+
+<pre><code>% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git static
+% cd static
+% git submodule init
+% git submodule update
+</code></pre>
+
+<h3 id="">新規記事投稿</h3>
+
+<p>ここまで設定すればあとは以下の手順で記事作成公開できる。</p>
+
+<pre><code>% npm start
+管理画面 http://localhost:2368/ghost へアクセスして記事投稿
+
+% buster generate --domain=http://localhost:2368
+% buster deploy
+</code></pre>
+
+<h3 id="sqlite3">sqlite3まわりでエラーが出る場合</h3>
+
+<p>npm start時に以下のエラーが出てsqlite3のモジュールが見つからないよと言われる場合。再インストールすると上手くいきました。</p>
+
+<p><a href="http://support.ghost.org/troubleshooting/">Ghost Troubleshooting Guide</a></p>
+
+<pre><code>ERROR: Cannot find module '/Users/satoshin2071/ghost/node_modules/sqlite3/lib/binding/node-v14-darwin-x64/node_sqlite3.node'
+
+
+% cd node_modules
+% rm -rf ./sqlite3
+% npm install sqlite3 --build-from-source
+もしくは
+% npm install https://github.com/mapbox/node-sqlite3/tarball/master
+% npm cache clean
+</code></pre>
+
+<h3 id="node">nodeのヴァージョンが違うとき</h3>
+
+<pre><code>Migrations: Up to date at version 003
+
+ERROR: Unsupported version of Node  
+Ghost needs Node version ~0.10.0 you are using version 0.12.2  
+Please go to http://nodejs.org to get a supported version  
+</code></pre>
+
+<p>Package.jsonを修正します。</p>
+
+<pre><code>% vim package.json
+
+"engines": {  
+        "node": "~0.10.0"
+    },
+
+↓
+
+"engines": {  
+        "node": "~0.12.2"
+    },
+
+% npm start
+
+&gt; ghost@0.5.2 start /Users/satoshin2071/ghost
+&gt; node index
+
+Migrations: Up to date at version 003  
+Ghost is running in development...  
+Listening on 127.0.0.1:2368  
+Url configured as: http://localhost:2368  
+Ctrl+C to shut down
+</code></pre>
+
+<p>いけました。</p>
+
+<h2 id="">参考</h2>
+
+<p><a href="https://stefanscherer.github.io/setup-ghost-for-github-pages/">Setup Ghost for GitHub Pages</a></p>
+
+<p><a href="http://xavierriley.co.uk/blogging-with-ghost-buster-and-github-pages/index.html">(RE)STARTING A BLOG WITH GHOST</a></p>
+
+<p><a href="http://qiita.com/sotarok/items/0d525e568a6088f6f6bb">Git Submoduleの基礎</a></p>
+
+<p><a href="http://blog.paulbird.co/running-ghost-in-node-0-12-0/">Running and Installing Ghost on Node 0.12.0</a></p>
+        </section>
+
+        <footer class="post-footer">
+
+
+
+            <section class="author">
+                <h4><a href="../author/satoshin/">satoshin</a></h4>
+
+                    <p>Read <a href="../author/satoshin/">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    
+                    
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/share?text=Ghost%E3%82%92Buster%E3%81%A7GithubPages%E3%81%AB%E3%83%9B%E3%82%B9%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B&amp;url=http://localhost:2368/ghostwobusterdegithubpagesnihosuteingusuru/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:2368/ghostwobusterdegithubpagesnihosuteingusuru/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:2368/ghostwobusterdegithubpagesnihosuteingusuru/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+    </article>
+
+</main>
+
+
+
+    <footer class="site-footer clearfix">
+         <section class="copyright"><a href="../">SatoshiN Blog</a> © 2015</section>
+         <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
+    </footer>
+
+    <script src="../public/jquery.js?v=ba478f2958"></script>
+
+    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=ba478f2958"></script>
+    <script type="text/javascript" src="../assets/js/index.js?v=ba478f2958"></script>
+
+</body>

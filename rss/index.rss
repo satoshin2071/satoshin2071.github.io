@@ -1,9 +1,192 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 27 Oct 2015 07:02:50 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>post test</title><description>&lt;h3 id=""&gt;概要&lt;/h3&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 30 Oct 2015 13:49:43 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>GhostをBusterでGithubPagesにホスティングする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
-&lt;p&gt;投稿のテスト&lt;/p&gt;
+&lt;p&gt;Ghost を Buster を利用して静的なサイトとして吐き出して Github Pagesでホスティングする手順と運用方法&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;投稿!!!
-&lt;/code&gt;&lt;/pre&gt;</description><link>http://localhost:2368/post-test/</link><guid isPermaLink="false">7042c1fa-2dbe-4ce7-9f9f-c66c994eefe6</guid><dc:creator>satoshin</dc:creator><pubDate>Tue, 27 Oct 2015 06:49:40 GMT</pubDate></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
+&lt;h2 id="ghost"&gt;なぜGhostか&lt;/h2&gt;
+
+&lt;p&gt;HugoやOctopressなど色々試した結果、最終的にGhostで落ち着きました。&lt;/p&gt;
+
+&lt;p&gt;Hugoも導入はラクチンでしたがGhostは管理画面が使いやすいのが決め手でした。&lt;/p&gt;
+
+&lt;h2 id=""&gt;環境&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;OSX Yosemite 10.10.5
+
+% brew -v
+Homebrew 0.9.5  
+% node -v
+v0.10.33  
+% npm -v
+2.1.6  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;手順&lt;/h2&gt;
+
+&lt;h3 id="nodejs"&gt;node.jsのインストール&lt;/h3&gt;
+
+&lt;p&gt;wgetはお好みで。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew install node
+% brew install wget
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="ghost"&gt;Ghostのインストールと起動&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% mkdir ghost
+% cd ghost
+% wget --no-check-certificate https://ghost.org/zip/ghost-0.5.2.zip
+% unzip ghost-0.5.2.zip
+% npm install --production
+% npm start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;sqlite3のエラーが出る場合は後述。&lt;/p&gt;
+
+&lt;h3 id="ghost"&gt;Ghostにログイン&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;http://localhost:2368/ghost&lt;/code&gt; でアカウント設定を行い、管理画面へログインできる。&lt;/p&gt;
+
+&lt;h3 id="githubpages"&gt;GitHubPagesにレポジトリの作成&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;GiHubにアクセス  &lt;/li&gt;
+&lt;li&gt;+new repositoryをぽちっと  &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;username/username.github.io&lt;/code&gt;のレポジトリを作成&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id="ghostclone"&gt;Ghostのディレクトリに作成したレポジトリをcloneする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git ./static
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="buster"&gt;Busterのインストール&lt;/h3&gt;
+
+&lt;p&gt;Ghostを静的ページとしてstaticディレクトリ以下に吐き出すためのツールとして&lt;code&gt;buster&lt;/code&gt;をインストールする。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm start&lt;/code&gt;で起動させたGhostはそのままにしてターミナルで新しいタブを開いて作業を行う。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew install python
+% sudo pip install buster
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="buster"&gt;Busterの出力元ディレクトリとデプロイ先を設定&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% buster setup --gh-repo=git@github.com:username/username.github.io.git static
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="ghostbuster"&gt;Ghost Buster !!&lt;/h3&gt;
+
+&lt;p&gt;Ghostの内容をstatic以下にBusterする。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;buster deploy&lt;/code&gt;コマンドで指定したデプロイ先にpushするまでを行ってくれる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% pwd /Users/username/ghost
+% buster generate --domain=http://localhost:2368
+% buster preview  #browse http://localhost:9000
+% buster deploy
+Good job! Deployed to Github Pages.  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="https://satoshin2071.github.io/"&gt;生成されたページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;運用方法&lt;/h2&gt;
+
+&lt;h3 id="staticbitbucket"&gt;staticディレクトリは以外はbitbucketで管理する&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% rm -rf static
+% git init
+% git remote add origin bitbucketの管理用リポジトリ
+% git add -A
+% git commit -m 'add'
+% git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="staticsubmodule"&gt;staticディレクトリをsubmoduleとして管理する&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git static
+% cd static
+% git submodule init
+% git submodule update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;新規記事投稿&lt;/h3&gt;
+
+&lt;p&gt;ここまで設定すればあとは以下の手順で記事作成公開できる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% npm start
+管理画面 http://localhost:2368/ghost へアクセスして記事投稿
+
+% buster generate --domain=http://localhost:2368
+% buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="sqlite3"&gt;sqlite3まわりでエラーが出る場合&lt;/h3&gt;
+
+&lt;p&gt;npm start時に以下のエラーが出てsqlite3のモジュールが見つからないよと言われる場合。再インストールすると上手くいきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://support.ghost.org/troubleshooting/"&gt;Ghost Troubleshooting Guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR: Cannot find module '/Users/satoshin2071/ghost/node_modules/sqlite3/lib/binding/node-v14-darwin-x64/node_sqlite3.node'
+
+
+% cd node_modules
+% rm -rf ./sqlite3
+% npm install sqlite3 --build-from-source
+もしくは
+% npm install https://github.com/mapbox/node-sqlite3/tarball/master
+% npm cache clean
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="node"&gt;nodeのヴァージョンが違うとき&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;Migrations: Up to date at version 003
+
+ERROR: Unsupported version of Node  
+Ghost needs Node version ~0.10.0 you are using version 0.12.2  
+Please go to http://nodejs.org to get a supported version  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Package.jsonを修正します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% vim package.json
+
+"engines": {  
+        "node": "~0.10.0"
+    },
+
+↓
+
+"engines": {  
+        "node": "~0.12.2"
+    },
+
+% npm start
+
+&amp;gt; ghost@0.5.2 start /Users/satoshin2071/ghost
+&amp;gt; node index
+
+Migrations: Up to date at version 003  
+Ghost is running in development...  
+Listening on 127.0.0.1:2368  
+Url configured as: http://localhost:2368  
+Ctrl+C to shut down
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;いけました。&lt;/p&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="https://stefanscherer.github.io/setup-ghost-for-github-pages/"&gt;Setup Ghost for GitHub Pages&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://xavierriley.co.uk/blogging-with-ghost-buster-and-github-pages/index.html"&gt;(RE)STARTING A BLOG WITH GHOST&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://qiita.com/sotarok/items/0d525e568a6088f6f6bb"&gt;Git Submoduleの基礎&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://blog.paulbird.co/running-ghost-in-node-0-12-0/"&gt;Running and Installing Ghost on Node 0.12.0&lt;/a&gt;&lt;/p&gt;</description><link>http://localhost:2368/ghostwobusterdegithubpagesnihosuteingusuru/</link><guid isPermaLink="false">d7831ada-21b5-4b0f-9f56-14bceffa85b5</guid><dc:creator>satoshin</dc:creator><pubDate>Fri, 30 Oct 2015 13:45:13 GMT</pubDate></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
 
 &lt;h2 id="gettingstarted"&gt;Getting Started&lt;/h2&gt;
 
