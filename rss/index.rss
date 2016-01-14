@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 14 Jan 2016 14:40:34 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>test</title><description>&lt;p&gt;this is test&lt;/p&gt;</description><link>http://localhost:2368/test/</link><guid isPermaLink="false">74c5f04f-1d75-4b57-9700-680c0fc38d93</guid><dc:creator>satoshin</dc:creator><pubDate>Thu, 14 Jan 2016 14:36:39 GMT</pubDate></item><item><title>GhostをBusterでGithubPagesにホスティングする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 14 Jan 2016 14:44:03 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>GhostをBusterでGithubPagesにホスティングする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;Ghost を Buster を利用して静的なサイトとして吐き出して Github Pagesでホスティングする手順と運用方法&lt;/p&gt;
 
@@ -72,7 +72,7 @@ v0.10.33
 
 &lt;h3 id="buster"&gt;Busterのデプロイ先を設定&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;% buster setup --gh-repo=git@github.com:username/username.github.io.git static
+&lt;pre&gt;&lt;code&gt;% buster setup --gh-repo=git@github.com:username/username.github.io.git --dir=static
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id="ghostbuster"&gt;Ghost Buster !!&lt;/h3&gt;
