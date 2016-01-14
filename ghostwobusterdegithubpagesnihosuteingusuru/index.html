@@ -11,7 +11,7 @@
 
     <link rel="shortcut icon" href="../favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=ba478f2958">
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=91a4c32e0f">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,400">
 
     <meta name="generator" content="Ghost 0.5">
@@ -37,7 +37,7 @@
         <header class="post-header">
             <h1 class="post-title">GhostをBusterでGithubPagesにホスティングする</h1>
             <section class="post-meta">
-                <time class="post-date" datetime="2015-10-30">30 October 2015</time> 
+                <time class="post-date" datetime="2016-01-14">14 January 2016</time> 
             </section>
         </header>
 
@@ -94,7 +94,7 @@ v0.10.33
 
 <ol>
 <li>GiHubにアクセス  </li>
-<li>+new repositoryをぽちっと  </li>
+<li>+new repository  </li>
 <li><code>username/username.github.io</code>のレポジトリを作成</li>
 </ol>
 
@@ -106,15 +106,15 @@ v0.10.33
 
 <h3 id="buster">Busterのインストール</h3>
 
-<p>Ghostを静的ページとしてstaticディレクトリ以下に吐き出すためのツールとして<code>buster</code>をインストールする。</p>
+<p>Ghostを静的ページとしてstaticディレクトリ以下に吐き出すためのツールとしてbusterをインストールする。</p>
 
-<p><code>npm start</code>で起動させたGhostはそのままにしてターミナルで新しいタブを開いて作業を行う。</p>
+<p>npm startはそのままにしておきたいので、ターミナルで新しいタブを開いて作業を行う。</p>
 
 <pre><code>% brew install python
 % sudo pip install buster
 </code></pre>
 
-<h3 id="buster">Busterの出力元ディレクトリとデプロイ先を設定</h3>
+<h3 id="buster">Busterのデプロイ先を設定</h3>
 
 <pre><code>% buster setup --gh-repo=git@github.com:username/username.github.io.git static
 </code></pre>
@@ -168,7 +168,7 @@ Good job! Deployed to Github Pages.
 % buster deploy
 </code></pre>
 
-<h3 id="sqlite3">sqlite3まわりでエラーが出る場合</h3>
+<h2 id="sqlite3">sqlite3まわりでエラーが出る場合</h2>
 
 <p>npm start時に以下のエラーが出てsqlite3のモジュールが見つからないよと言われる場合。再インストールすると上手くいきました。</p>
 
@@ -185,7 +185,7 @@ Good job! Deployed to Github Pages.
 % npm cache clean
 </code></pre>
 
-<h3 id="node">nodeのヴァージョンが違うとき</h3>
+<h2 id="node">nodeのヴァージョンが違うとき</h2>
 
 <pre><code>Migrations: Up to date at version 003
 
@@ -270,13 +270,13 @@ Ctrl+C to shut down
 
 
     <footer class="site-footer clearfix">
-         <section class="copyright"><a href="../">SatoshiN Blog</a> © 2015</section>
+         <section class="copyright"><a href="../">SatoshiN Blog</a> © 2016</section>
          <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
     </footer>
 
-    <script src="../public/jquery.js?v=ba478f2958"></script>
+    <script src="../public/jquery.js?v=91a4c32e0f"></script>
 
-    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=ba478f2958"></script>
-    <script type="text/javascript" src="../assets/js/index.js?v=ba478f2958"></script>
+    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=91a4c32e0f"></script>
+    <script type="text/javascript" src="../assets/js/index.js?v=91a4c32e0f"></script>
 
 </body>
