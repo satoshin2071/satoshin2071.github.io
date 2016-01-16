@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 14 Jan 2016 15:11:40 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 16 Jan 2016 06:02:00 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。&lt;/p&gt;
 
@@ -30,8 +30,10 @@
 &lt;h2 id="swift"&gt;Swiftの最新情報を得るために&lt;/h2&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/apple/swift-evolution"&gt;swift-evolution&lt;/a&gt;をwatchする&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/trending?l=swift"&gt;Trending repositories&lt;/a&gt;チェックする&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.iosdevbot.com/"&gt;iOSdevbot&lt;/a&gt;をチェックする&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/trending?l=swift"&gt;GitHubのTrending repositories&lt;/a&gt;チェックしてコードリーディング&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.appcoda.com/"&gt;appcode&lt;/a&gt;をチェックする&lt;/li&gt;
 &lt;li&gt;3月に行われる&lt;code&gt;try! Swift&lt;/code&gt;カンファレンスの発起人の&lt;a href="http://nshipster.com/"&gt;NSHipster&lt;/a&gt;のContributorsの方々や&lt;a href="https://www.objc.io/"&gt;objc.io&lt;/a&gt;を立ち上げた御三方をTwitter,Github等でフォローする&lt;/li&gt;
 &lt;li&gt;twitterで#swiftlangをチェックする&lt;/li&gt;
 &lt;li&gt;Qiita の Swiftタグをチェックする&lt;/li&gt;
