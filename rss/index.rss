@@ -1,4 +1,183 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 20 Jan 2016 13:57:45 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Feb 2016 14:46:22 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://doc.aldebaran.com/2-1/dev/js/index.html"&gt;QiMessagingJavaScript&lt;/a&gt;と&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;を利用し&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt; &amp;amp; &lt;code&gt;Pepperで発火したイベントの通知をiOSで受け取る&lt;/code&gt; を実装したサンプルです。&lt;/p&gt;
+
+&lt;p&gt;iOS側のサンプルはObjCで実装を行っています。&lt;/p&gt;
+
+&lt;p&gt;JavaScriptでのpepperとやりとりする部分は先にAndroidで実装していたものを参考にさせて頂きました。感謝です。&lt;/p&gt;
+
+&lt;h2 id=""&gt;注意点&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Pepperと同じネットワークに接続している必要あり&lt;/li&gt;
+&lt;li&gt;Xcodeの&lt;a href="http://qiita.com/cheeeeese/items/792d5c4d8710cd207b54"&gt;ATSの設定を無効にする&lt;/a&gt;必要あり&lt;/li&gt;
+&lt;li&gt;実機で検証しました。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="pepper"&gt;Pepper側&lt;/h2&gt;
+
+&lt;p&gt;今回Pepper側で実装するのはイベントを発火させるだけの処理です。 &lt;code&gt;advancedボックスライブラリ &amp;gt; Memory &amp;gt; Raise Eventボックス&lt;/code&gt;を配置し、適当な変数名「PepperQiMessaging/test」を設定します。この変数名に紐づくPepperのメモリイベントをiOS側のJavaScriptで監視することによってイベントを受け取ることが可能になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/satoshin2071/Samples/master/Projects/ToBridgeOfPepperAndiOSSample/raiseEvent.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id="ios"&gt;iOS側&lt;/h2&gt;
+
+&lt;p&gt;WebViewでJavaScriptが記述してあるHTMLファイルを読み込んでやりとりを行います。細かい手順は以下です。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;QiMessaging JavaScript&lt;/code&gt;ライブラリを読み込んであるHTMLファイルをUIWebViewで開く  &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WebViewJavascriptBridge&lt;/code&gt;を利用してObjCとjavascriptをbridgeさせる  &lt;/li&gt;
+&lt;li&gt;JavaScriptの命令を実行することでPepperのNAOqiのAPIに対して操作コマンドを送る、またはpepperのイベントを受け取ってObjCの処理を呼び出す&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleApp.html 読み込んでいるjsライブラリ
+
+&amp;lt;script type="text/javascript" src="jquery.min.js"&amp;gt;&amp;lt;/script&amp;gt;  
+&amp;lt;script type="text/javascript" src="socket.io.min.js"&amp;gt;&amp;lt;/script&amp;gt;  
+&amp;lt;script type="text/javascript" src="qi.js"&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href="http://dev.classmethod.jp/references/iso-7-javascriptcore-jquery-underscore/"&gt;JavaScriptCore.frameworkで外部ライブラリは利用できない模様&lt;/a&gt;なのでWebView主体の方法で実装しています。&lt;/p&gt;
+
+&lt;h3 id="iospepper"&gt;iOSからPepperに命令を送る&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;QiSessionを生成してpepperとリアルタイムチャット接続を確立する  &lt;/li&gt;
+&lt;li&gt;pepperに命令を送るためにALProxyのインスタンスを保持  &lt;/li&gt;
+&lt;li&gt;登録したメソッドをObjCで呼び出す&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;InterfaceBuilderで適当にボタンを配置し、押したときの &lt;code&gt;connect&lt;/code&gt;メソッドの中身を以下のように実装します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ViewController
+
+/**
+ *  pepperと接続開始コマンドを送る
+ *
+ *  @param sender
+ */
+- (IBAction)connect:(UIButton *)sender
+{
+    [self.bridge callHandler:@"startConnect" data:PepperIPAddress responseCallback:^(id response) {
+        NSLog(@"接続するためのjsを叩いたコールバック: %@", response);
+    }];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接続成功時に&lt;code&gt;init()&lt;/code&gt;と&lt;code&gt;observe()&lt;/code&gt;を呼び出し、ALProxyのインスタンスを保持、ALMemoryのイベントの監視を開始します(後述)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleApp.html
+
+// pepperと通信を開始する
+bridge.registerHandler('startConnect', function(data, responseCallback) {  
+log('Call Connnect to Pepper With IPAddress : ', data)
+
+    qiSession = new QiSession(data);
+    qiSession.socket().on('connect', function(){
+
+                          qiSession.service("ALTextToSpeech").done(function(tts){tts.say("接続しました。");})
+
+                          init();
+                          observe();
+
+                          var responseData = { 'Javascript Says':'Right back atcha!' }
+                          log('connect Success !!', responseData)
+                          responseCallback(responseData)
+
+                          })
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接続に成功したら、あとは命令を送るだけです。ViewControllerでボタンを押したら挨拶する処理を追記します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ViewController.m
+
+/**
+ *  挨拶コマンドを送る
+ *
+ *  @param sender
+ */
+- (IBAction)hello:(UIButton *)sender
+{
+    [self.bridge callHandler:@"hello" data:@"こんにちは、ペッパーです。" responseCallback:^(id response) {
+        NSLog(@"挨拶するためのjsを叩いたコールバック: %@", response);
+    }];
+}
+
+ExampleApp.html
+
+// 挨拶コマンドを送る
+bridge.registerHandler('hello', function(data, responseCallback) {  
+          log('Call Send Command to next ')
+
+          self.textToSpeech.say(data);
+
+          responseCallback("コールバックあれば渡す")
+          })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ボタン押したらpepperがしゃべるはず！&lt;/p&gt;
+
+&lt;h3 id="pepperios"&gt;pepperで発火したイベントの通知をiOSで受け取る&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;QiSessionを生成してpepperとリアルタイムチャット接続を確立する  &lt;/li&gt;
+&lt;li&gt;iOS側のjsでイベントを受け取るためにALMemoryのイベントの監視する  &lt;/li&gt;
+&lt;li&gt;Choregrapheでアプリケーションを再生させてイベントを発火させる  &lt;/li&gt;
+&lt;li&gt;対応する処理に通知されiOS側で処理を実行する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;手順1. は&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt;の初期化処理です。接続成功時に&lt;code&gt;observe()&lt;/code&gt;を呼び出し&lt;code&gt;ALMemory.subscriber&lt;/code&gt;によるイベントの監視登録を行っています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleApp.html
+
+function observe(){  
+log('イベントコールバック登録')
+
+  qiSession.service("ALMemory").done(function(am){
+
+    // コレグラフの「RaiseEvent」ボックスで登録した「PepperQiMessaging/test」イベントが発火したときに呼ばれるメソッド
+    am.subscriber("PepperQiMessaging/test").done(function(subscriber){
+       subscriber.signal.connect(function(value){
+
+                                 /* 発火時に実行したい処理 */
+                                 bridge.callHandler('pepperEvent', {'foo': 'bar'}, function(response) {
+                                                    log('ペッパーイベント発火時のresponse', response)
+
+                                                    })
+                                 });
+        });
+     });
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ViewControllerでペッパーが発火させたイベントのコールバックを受け取る処理をViewDidLoadあたりで呼び出して登録しておきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ViewController.m
+
+[self.bridge registerHandler:@"pepperEvent" handler:^(id data, WVJBResponseCallback responseCallback) {
+    NSLog(@"ペッパーが発火したイベントをObjCで受け取るサンプル %@", data);
+    responseCallback(@"ObjCで受け取ったかどうかはNSLogで確認");
+}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Choregrapheでアプリケーションの再生ボタンを押したらiPhoneシュミレータとXcodeにログがでるはず！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/satoshin2071/Samples/tree/master/Projects/ToBridgeOfPepperAndiOSSample"&gt;プロジェクトファイルはこちら&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;h2 id="todo"&gt;TODO&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Choregrapheのバーチャルロボットと繋ぐ方法&lt;/li&gt;
+&lt;li&gt;iOSのWebViewで読み込むHTMLファイルのJS部分がネストしてて色々キツイのでどうにかしたい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;参考にさせて頂きました。ありがとうございます。&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/Atelier-Akihabara/items/716e88b306db12751c9b"&gt;PepperタブレットにおけるJavaScript活用コンテンツ(QiMessaging JavaScript)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><dc:creator>satoshin</dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。&lt;/p&gt;
 
