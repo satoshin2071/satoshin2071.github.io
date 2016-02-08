@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Feb 2016 14:46:22 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Feb 2016 15:04:31 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href="http://doc.aldebaran.com/2-1/dev/js/index.html"&gt;QiMessagingJavaScript&lt;/a&gt;と&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;を利用し&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt; &amp;amp; &lt;code&gt;Pepperで発火したイベントの通知をiOSで受け取る&lt;/code&gt; を実装したサンプルです。&lt;/p&gt;
 
@@ -177,7 +177,7 @@ log('イベントコールバック登録')
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="http://qiita.com/Atelier-Akihabara/items/716e88b306db12751c9b"&gt;PepperタブレットにおけるJavaScript活用コンテンツ(QiMessaging JavaScript)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><dc:creator>satoshin</dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><category>iOS</category><category>pepper</category><category>objC</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。&lt;/p&gt;
 

@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>iOS - SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Feb 2016 15:04:32 GMT</lastBuildDate><atom:link href="http://localhost:2368/tag/ios/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>objC - SatoshiN Blog</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 08 Feb 2016 15:04:32 GMT</lastBuildDate><atom:link href="http://localhost:2368/tag/objc/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href="http://doc.aldebaran.com/2-1/dev/js/index.html"&gt;QiMessagingJavaScript&lt;/a&gt;と&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;を利用し&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt; &amp;amp; &lt;code&gt;Pepperで発火したイベントの通知をiOSで受け取る&lt;/code&gt; を実装したサンプルです。&lt;/p&gt;
 
@@ -177,86 +177,4 @@ log('イベントコールバック登録')
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="http://qiita.com/Atelier-Akihabara/items/716e88b306db12751c9b"&gt;PepperタブレットにおけるJavaScript活用コンテンツ(QiMessaging JavaScript)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><category>iOS</category><category>pepper</category><category>objC</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
-
-&lt;p&gt;iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。&lt;/p&gt;
-
-&lt;p&gt;Swiftという言語そのもの以外にもFunctionalReactiveProgramming、MVVM、などモダンな開発tipsにあまり慣れていないので、Swiftの機能を存分に利用した堅牢な開発を当面の目標にしてみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;まあ兎にも角にも新しい言語で書くのって楽しいですよね(●´ڡ`●)&lt;/p&gt;
-
-&lt;p&gt;言語仕様に対する疑問点については今後書いていきたいと思いますので、まずは学習しはじめた際に利用したサイトやハマったとこのメモをまとめます。&lt;/p&gt;
-
-&lt;h2 id="swifttips"&gt;Swiftを学ぶにあたって先人達のtips&lt;/h2&gt;
-
-&lt;p&gt;言語仕様は当然ながら公式リファレンスやGitHubを読むとして、補足資料としての日本語
-記事はやはり参考になります。自分の言葉で噛み砕いて追記してくれてるとスッと入ってきますよね。英単語のボキャブラリを増やさねば…&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="http://seeku.hateblo.jp/entry/2014/06/05/182519"&gt;The Swift Programming Languageのメモ（その１）&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://swiftrithm.com/"&gt;SWIFTRITHM&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://tea-leaves.jp/swift/content/swift"&gt;Swift言語を学ぶ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;コーディング規約&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/jarinosuke/swift-style-guide/blob/master/README_JP.md"&gt;github&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/wantedly/swift-style-guide/blob/master/README.md"&gt;wantedly&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/dekatotoro/swift-style-guide/blob/master/ja_style_guide.md"&gt;raywenderlich.com&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id="swift"&gt;Swiftの最新情報を得るために&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/apple/swift-evolution"&gt;swift-evolution&lt;/a&gt;などswift関連のレポジトリをwatchする&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/trending?l=swift"&gt;Trending repositories&lt;/a&gt;チェックする&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.iosdevbot.com/"&gt;iOSdevbot&lt;/a&gt;をチェックする&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/potatotips/potatotips/wiki"&gt;potatotips&lt;/a&gt;をチェックする&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.appcoda.com/"&gt;appcode&lt;/a&gt;をチェックする&lt;/li&gt;
-&lt;li&gt;3月に行われる&lt;code&gt;try! Swift&lt;/code&gt;カンファレンスの発起人の&lt;a href="http://nshipster.com/"&gt;NSHipster&lt;/a&gt;のContributorsの方々や&lt;a href="https://www.objc.io/"&gt;objc.io&lt;/a&gt;を立ち上げた御三方をTwitter,Github等でフォローしてチェックする&lt;/li&gt;
-&lt;li&gt;twitterで#swiftlangをチェックする&lt;/li&gt;
-&lt;li&gt;Qiita の Swiftタグをチェックする&lt;/li&gt;
-&lt;li&gt;似たようなフォーマットの週刊ブログ。&lt;a href="http://curated.co/"&gt;curated&lt;/a&gt;ってサービス流行ってるんですかね。
-&lt;ul&gt;&lt;li&gt;&lt;a href="http://indieiosfocus.curated.co/"&gt;Indie iOS Focus Weekly&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://swiftnews.curated.co/"&gt;This Week in Swift&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=""&gt;ジェネリクスが理解できない&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href="http://tech.recruit-mp.co.jp/mobile/studying-swift-generitics/"&gt;この記事&lt;/a&gt;の解説が非常にわかりやすくてすごい感謝&lt;/p&gt;
-
-&lt;h2 id="cocoapodscarthage"&gt;CocoaPodsとCarthageの違いについて&lt;/h2&gt;
-
-&lt;p&gt;そもそも目的とユースケースが違ったんですね。
-&lt;a href="http://qiita.com/nori0620/items/b81ae171f0e82b0c2d8a"&gt;http://qiita.com/nori0620/items/b81ae171f0e82b0c2d8a&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id="cococapodplaygroud"&gt;CococaPodで導入したライブラリをPlaygroudで使う&lt;/h2&gt;
-
-&lt;p&gt;Playgroud上で&lt;code&gt;import ライブラリ名&lt;/code&gt;としても &lt;code&gt;No Such Module 〜&lt;/code&gt;として怒られます。&lt;/p&gt;
-
-&lt;p&gt;対応としては、&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Manage Schemesからライブラリのスキーム追加して一度ビルドする。&lt;/li&gt;
-&lt;li&gt;右ペインを開いてPlatformの設定をOSXからiOSに変更すること&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;などといったことを行えばエラーが解消されるはずですが、ホントに一度ビルドする必要があるのか、本当にこれであってるのかは未検証です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Scheme -&amp;gt; Manage Schemes...
-
-checked Alamofire checkbox　→　Build Alamofire scheme  
-and, you should change settings Playground:
-
-View -&amp;gt; Utilities -&amp;gt; Show File Inspector
-
-Platform OSX → iOS  
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id="todo"&gt;TODO&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;objCにはないSwift独特の書き方を抽出してまとめていく。&lt;/li&gt;
-&lt;li&gt;iOS以外にもSwiftを活用する事例をさがしてコードリーディングする&lt;/li&gt;
-&lt;/ul&gt;</description><link>http://localhost:2368/swiftkotohazime/</link><guid isPermaLink="false">959145b3-16a3-43cd-8afc-330a88c686e1</guid><category>Swift</category><category>iOS</category><dc:creator>satoshin</dc:creator><pubDate>Thu, 14 Jan 2016 15:09:32 GMT</pubDate></item></channel></rss>
+&lt;/ul&gt;</description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><category>iOS</category><category>pepper</category><category>objC</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item></channel></rss>

@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Swift - SatoshiN Blog</title>
+    <title>objC - SatoshiN Blog</title>
     <meta name="description" content="">
 
     <meta name="HandheldFriendly" content="True">
@@ -18,17 +18,17 @@
 <link rel="alternate" type="application/rss+xml" title="SatoshiN Blog" href="../../rss/index.html">
 <link rel="canonical" href="index.html">
 </head>
-<body class="tag-template tag-swift">
+<body class="tag-template tag-objc">
 
     
 <header class="main-header tag-head no-cover">
     <nav class="main-nav overlay clearfix">
         <a class="back-button icon-arrow-left" href="../../">Home</a>
-        <a class="subscribe-button icon-feed" href="rss/index.rss">Swift</a>
+        <a class="subscribe-button icon-feed" href="rss/index.rss">objC</a>
     </nav>
     <div class="vertical">
         <div class="main-header-content inner">
-            <h1 class="page-title">Swift</h1>
+            <h1 class="page-title">objC</h1>
             <h2 class="page-description">A 1-post collection</h2>
         </div>
     </div>
@@ -42,18 +42,18 @@
     </nav>
     </div>
     
-    <article class="post tag-swift tag-ios">
+    <article class="post tag-ios tag-pepper tag-objc">
         <header class="post-header">
-            <h2 class="post-title"><a href="../../swiftkotohazime/">Swiftことはじめ</a></h2>
+            <h2 class="post-title"><a href="../../qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/">QiMessagingでiOSとPepperを相互にやりとりするサンプル</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>はじめに iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。 Swiftという言語そのもの以外にもFunctionalReactiveProgramming、MVVM、などモダンな開発tipsにあまり慣れていないので、Swiftの機能を存分に利用した堅牢な開発を当面の目標にしてみたいと思います。 まあ兎にも角にも新しい言語で書くのって楽しいですよね(●´ڡ`●) 言語仕様に対する疑問点については今後書いていきたいと思いますので、まずは学習しはじめた際に利用したサイトやハマったとこのメモをまとめます。 Swiftを学ぶにあたって先人達のtips 言語仕様は当然ながら公式リファレンスやGitHubを読むとして、補足資料としての日本語 記事はやはり参考になります。自分の言葉で噛み砕いて追記してくれてるとスッと入ってきますよね。英単語のボキャブラリを増やさねば… The Swift Programming Languageのメモ（その１） SWIFTRITHM Swift言語を学ぶ コーディング規約 github <a class="read-more" href="../../swiftkotohazime/">»</a></p>
+            <p>概要 QiMessagingJavaScriptとWebViewJavascriptBridgeを利用しiOSからPepperに命令を送る &amp; Pepperで発火したイベントの通知をiOSで受け取る を実装したサンプルです。 iOS側のサンプルはObjCで実装を行っています。 JavaScriptでのpepperとやりとりする部分は先にAndroidで実装していたものを参考にさせて頂きました。感謝です。 注意点 Pepperと同じネットワークに接続している必要あり XcodeのATSの設定を無効にする必要あり 実機で検証しました。 Pepper側 今回Pepper側で実装するのはイベントを発火させるだけの処理です。 advancedボックスライブラリ &gt; Memory &gt; Raise Eventボックスを配置し、適当な変数名「PepperQiMessaging/test」を設定します。この変数名に紐づくPepperのメモリイベントをiOS側のJavaScriptで監視することによってイベントを受け取ることが可能になります。 iOS側 <a class="read-more" href="../../qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/">»</a></p>
         </section>
         <footer class="post-meta">
             
             <a href="../../author/satoshin/">satoshin</a>
-             on <a href="index.html">Swift</a>, <a href="../ios/">iOS</a>
-            <time class="post-date" datetime="2016-01-15">15 January 2016</time>
+             on <a href="../ios/">iOS</a>, <a href="../pepper/">pepper</a>, <a href="index.html">objC</a>
+            <time class="post-date" datetime="2016-02-08">08 February 2016</time>
         </footer>
     </article>
     
