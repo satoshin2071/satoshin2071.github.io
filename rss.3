@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[SatoshiN Blog]]></title><description><![CDATA[woohooo!!]]></description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 11 Feb 2016 12:39:11 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[QiMessagingでiOSとPepperを相互にやりとりするサンプル]]></title><description><![CDATA[<h2 id="">概要</h2>
+
+<p><a href="http://doc.aldebaran.com/2-1/dev/js/index.html">QiMessagingJavaScript</a>と<a href="https://github.com/marcuswestin/WebViewJavascriptBridge">WebViewJavascriptBridge</a>を利用し<code>iOSからPepperに命令を送る</code> &amp; <code>Pepperで発火したイベントの通知をiOSで受け取る</code> を実装したサンプルです。</p>
+
+<p>iOS側のサンプルはObjCで実装を行っています。</p>
+
+<p>JavaScriptでのpepperとやりとりする部分は先にAndroidで実装していたものを参考にさせて頂きました。感謝です。</p>
+
+<h2 id="">注意点</h2>
+
+<ul>
+<li>Pepperと同じネットワークに接続している必要あり</li>
+<li>Xcodeの<a href="http://qiita.com/cheeeeese/items/792d5c4d8710cd207b54">ATSの設定を無効にする</a>必要あり</li>
+<li>実機で検証しました。</li>
+</ul>
+
+<h2 id="pepper">Pepper側</h2>
+
+<p>今回Pepper側で実装するのはイベントを発火させるだけの処理です。 <code>advancedボックスライブラリ &gt; Memory &gt; Raise Eventボックス</code>を配置し、適当な変数名「PepperQiMessaging/test」を設定します。この変数名に紐づくPepperのメモリイベントをiOS側のJavaScriptで監視することによってイベントを受け取ることが可能になります。</p>
+
+<p><img src="https://raw.githubusercontent.com/satoshin2071/Samples/master/Projects/ToBridgeOfPepperAndiOSSample/raiseEvent.png" alt=""></p>
+
+<h2 id="ios">iOS側</h2>
+
+<p>WebViewでJavaScriptが記述してあるHTMLファイルを読み込んでやりとりを行います。細かい手順は以下です。</p>
+
+<ol>
+<li><code>QiMessaging JavaScript</code>ライブラリを読み込んであるHTMLファイルをUIWebViewで開く  </li>
+<li><code>WebViewJavascriptBridge</code>を利用してObjCとjavascriptをbridgeさせる  </li>
+<li>JavaScriptの命令を実行することでPepperのNAOqiのAPIに対して操作コマンドを送る、またはpepperのイベントを受け取ってObjCの処理を呼び出す</li>
+</ol>
+
+<pre><code>ExampleApp.html 読み込んでいるjsライブラリ
+
+&lt;script type="text/javascript" src="jquery.min.js"&gt;&lt;/script&gt;  
+&lt;script type="text/javascript" src="socket.io.min.js"&gt;&lt;/script&gt;  
+&lt;script type="text/javascript" src="qi.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p><a href="http://dev.classmethod.jp/references/iso-7-javascriptcore-jquery-underscore/">JavaScriptCore.frameworkで外部ライブラリは利用できない模様</a>なのでWebView主体の方法で実装しています。</p>
+
+<h3 id="iospepper">iOSからPepperに命令を送る</h3>
+
+<ol>
+<li>QiSessionを生成してpepperとリアルタイムチャット接続を確立する  </li>
+<li>pepperに命令を送るためにALProxyのインスタンスを保持  </li>
+<li>登録したメソッドをObjCで呼び出す</li>
+</ol>
+
+<p>InterfaceBuilderで適当にボタンを配置し、押したときの <code>connect</code>メソッドの中身を以下のように実装します。</p>
+
+<pre><code>ViewController
+
+/**
+ *  pepperと接続開始コマンドを送る
+ *
+ *  @param sender
+ */
+- (IBAction)connect:(UIButton *)sender
+{
+    [self.bridge callHandler:@"startConnect" data:PepperIPAddress responseCallback:^(id response) {
+        NSLog(@"接続するためのjsを叩いたコールバック: %@", response);
+    }];
+}
+</code></pre>
+
+<p>接続成功時に<code>init()</code>と<code>observe()</code>を呼び出し、ALProxyのインスタンスを保持、ALMemoryのイベントの監視を開始します(後述)</p>
+
+<pre><code>ExampleApp.html
+
+// pepperと通信を開始する
+bridge.registerHandler('startConnect', function(data, responseCallback) {  
+log('Call Connnect to Pepper With IPAddress : ', data)
+
+    qiSession = new QiSession(data);
+    qiSession.socket().on('connect', function(){
+
+                          qiSession.service("ALTextToSpeech").done(function(tts){tts.say("接続しました。");})
+
+                          init();
+                          observe();
+
+                          var responseData = { 'Javascript Says':'Right back atcha!' }
+                          log('connect Success !!', responseData)
+                          responseCallback(responseData)
+
+                          })
+})
+</code></pre>
+
+<p>接続に成功したら、あとは命令を送るだけです。ViewControllerでボタンを押したら挨拶する処理を追記します。</p>
+
+<pre><code>ViewController.m
+
+/**
+ *  挨拶コマンドを送る
+ *
+ *  @param sender
+ */
+- (IBAction)hello:(UIButton *)sender
+{
+    [self.bridge callHandler:@"hello" data:@"こんにちは、ペッパーです。" responseCallback:^(id response) {
+        NSLog(@"挨拶するためのjsを叩いたコールバック: %@", response);
+    }];
+}
+
+ExampleApp.html
+
+// 挨拶コマンドを送る
+bridge.registerHandler('hello', function(data, responseCallback) {  
+          log('Call Send Command to next ')
+
+          self.textToSpeech.say(data);
+
+          responseCallback("コールバックあれば渡す")
+          })
+</code></pre>
+
+<p>ボタン押したらpepperがしゃべるはず！</p>
+
+<h3 id="pepperios">pepperで発火したイベントの通知をiOSで受け取る</h3>
+
+<ol>
+<li>QiSessionを生成してpepperとリアルタイムチャット接続を確立する  </li>
+<li>iOS側のjsでイベントを受け取るためにALMemoryのイベントの監視する  </li>
+<li>Choregrapheでアプリケーションを再生させてイベントを発火させる  </li>
+<li>対応する処理に通知されiOS側で処理を実行する</li>
+</ol>
+
+<p>手順1. は<code>iOSからPepperに命令を送る</code>の初期化処理です。接続成功時に<code>observe()</code>を呼び出し<code>ALMemory.subscriber</code>によるイベントの監視登録を行っています。</p>
+
+<pre><code>ExampleApp.html
+
+function observe(){  
+log('イベントコールバック登録')
+
+  qiSession.service("ALMemory").done(function(am){
+
+    // コレグラフの「RaiseEvent」ボックスで登録した「PepperQiMessaging/test」イベントが発火したときに呼ばれるメソッド
+    am.subscriber("PepperQiMessaging/test").done(function(subscriber){
+       subscriber.signal.connect(function(value){
+
+                                 /* 発火時に実行したい処理 */
+                                 bridge.callHandler('pepperEvent', {'foo': 'bar'}, function(response) {
+                                                    log('ペッパーイベント発火時のresponse', response)
+
+                                                    })
+                                 });
+        });
+     });
+};
+</code></pre>
+
+<p>ViewControllerでペッパーが発火させたイベントのコールバックを受け取る処理をViewDidLoadあたりで呼び出して登録しておきます。</p>
+
+<pre><code>ViewController.m
+
+[self.bridge registerHandler:@"pepperEvent" handler:^(id data, WVJBResponseCallback responseCallback) {
+    NSLog(@"ペッパーが発火したイベントをObjCで受け取るサンプル %@", data);
+    responseCallback(@"ObjCで受け取ったかどうかはNSLogで確認");
+}];
+</code></pre>
+
+<p>Choregrapheでアプリケーションの再生ボタンを押したらiPhoneシュミレータとXcodeにログがでるはず！</p>
+
+<p><a href="https://github.com/satoshin2071/Samples/tree/master/Projects/ToBridgeOfPepperAndiOSSample">プロジェクトファイルはこちら</a>です。</p>
+
+<h2 id="todo">TODO</h2>
+
+<ul>
+<li>Choregrapheのバーチャルロボットと繋ぐ方法</li>
+<li>iOSのWebViewで読み込むHTMLファイルのJS部分がネストしてて色々キツイのでどうにかしたい</li>
+</ul>
+
+<h2 id="">参考にさせて頂きました。ありがとうございます。</h2>
+
+<ul>
+<li><a href="http://qiita.com/Atelier-Akihabara/items/716e88b306db12751c9b">PepperタブレットにおけるJavaScript活用コンテンツ(QiMessaging JavaScript)</a></li>
+<li><a href="https://github.com/marcuswestin/WebViewJavascriptBridge">WebViewJavascriptBridge</a></li>
+</ul>]]></description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><category><![CDATA[iOS]]></category><category><![CDATA[pepper]]></category><category><![CDATA[objC]]></category><dc:creator><![CDATA[satoshin]]></dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item><item><title><![CDATA[Swiftことはじめ]]></title><description><![CDATA[<h2 id="">はじめに</h2>
+
+<p>iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。</p>
+
+<p>Swiftという言語そのもの以外にもFunctionalReactiveProgramming、MVVM、などモダンな開発tipsにあまり慣れていないので、Swiftの機能を存分に利用した堅牢な開発を当面の目標にしてみたいと思います。</p>
+
+<p>まあ兎にも角にも新しい言語で書くのって楽しいですよね(●´ڡ`●)</p>
+
+<p>言語仕様に対する疑問点については今後書いていきたいと思いますので、まずは学習しはじめた際に利用したサイトやハマったとこのメモをまとめます。</p>
+
+<h2 id="swifttips">Swiftを学ぶにあたって先人達のtips</h2>
+
+<p>言語仕様は当然ながら公式リファレンスやGitHubを読むとして、補足資料としての日本語
+記事はやはり参考になります。自分の言葉で噛み砕いて追記してくれてるとスッと入ってきますよね。英単語のボキャブラリを増やさねば…</p>
+
+<ul>
+<li><a href="http://seeku.hateblo.jp/entry/2014/06/05/182519">The Swift Programming Languageのメモ（その１）</a></li>
+<li><a href="http://swiftrithm.com/">SWIFTRITHM</a></li>
+<li><a href="http://tea-leaves.jp/swift/content/swift">Swift言語を学ぶ</a></li>
+</ul>
+
+<p>コーディング規約</p>
+
+<ul>
+<li><a href="https://github.com/jarinosuke/swift-style-guide/blob/master/README_JP.md">github</a></li>
+<li><a href="https://github.com/wantedly/swift-style-guide/blob/master/README.md">wantedly</a></li>
+<li><a href="https://github.com/dekatotoro/swift-style-guide/blob/master/ja_style_guide.md">raywenderlich.com</a></li>
+</ul>
+
+<h2 id="swift">Swiftの最新情報を得るために</h2>
+
+<ul>
+<li><a href="https://github.com/apple/swift-evolution">swift-evolution</a>などswift関連のレポジトリをwatchする</li>
+<li><a href="https://github.com/trending?l=swift">Trending repositories</a>チェックする</li>
+<li><a href="http://www.iosdevbot.com/">iOSdevbot</a>をチェックする</li>
+<li><a href="https://github.com/potatotips/potatotips/wiki">potatotips</a>をチェックする</li>
+<li><a href="http://www.appcoda.com/">appcode</a>をチェックする</li>
+<li>3月に行われる<code>try! Swift</code>カンファレンスの発起人の<a href="http://nshipster.com/">NSHipster</a>のContributorsの方々や<a href="https://www.objc.io/">objc.io</a>を立ち上げた御三方をTwitter,Github等でフォローしてチェックする</li>
+<li>twitterで#swiftlangをチェックする</li>
+<li>Qiita の Swiftタグをチェックする</li>
+<li>似たようなフォーマットの週刊ブログ。<a href="http://curated.co/">curated</a>ってサービス流行ってるんですかね。
+<ul><li><a href="http://indieiosfocus.curated.co/">Indie iOS Focus Weekly</a></li>
+<li><a href="https://swiftnews.curated.co/">This Week in Swift</a></li></ul></li>
+</ul>
+
+<h2 id="">ジェネリクスが理解できない</h2>
+
+<p><a href="http://tech.recruit-mp.co.jp/mobile/studying-swift-generitics/">この記事</a>の解説が非常にわかりやすくてすごい感謝</p>
+
+<h2 id="cocoapodscarthage">CocoaPodsとCarthageの違いについて</h2>
+
+<p>そもそも目的とユースケースが違ったんですね。
+<a href="http://qiita.com/nori0620/items/b81ae171f0e82b0c2d8a">http://qiita.com/nori0620/items/b81ae171f0e82b0c2d8a</a></p>
+
+<h2 id="cococapodplaygroud">CococaPodで導入したライブラリをPlaygroudで使う</h2>
+
+<p>Playgroud上で<code>import ライブラリ名</code>としても <code>No Such Module 〜</code>として怒られます。</p>
+
+<p>対応としては、</p>
+
+<ul>
+<li>Manage Schemesからライブラリのスキーム追加して一度ビルドする。</li>
+<li>右ペインを開いてPlatformの設定をOSXからiOSに変更すること</li>
+</ul>
+
+<p>などといったことを行えばエラーが解消されるはずですが、ホントに一度ビルドする必要があるのか、本当にこれであってるのかは未検証です。</p>
+
+<pre><code>Scheme -&gt; Manage Schemes...
+
+checked Alamofire checkbox　→　Build Alamofire scheme  
+and, you should change settings Playground:
+
+View -&gt; Utilities -&gt; Show File Inspector
+
+Platform OSX → iOS  
+</code></pre>
+
+<h2 id="todo">TODO</h2>
+
+<ul>
+<li>objCにはないSwift独特の書き方を抽出してまとめていく。</li>
+<li>iOS以外にもSwiftを活用する事例をさがしてコードリーディングする</li>
+</ul>]]></description><link>http://localhost:2368/swiftkotohazime/</link><guid isPermaLink="false">959145b3-16a3-43cd-8afc-330a88c686e1</guid><category><![CDATA[Swift]]></category><category><![CDATA[iOS]]></category><dc:creator><![CDATA[satoshin]]></dc:creator><pubDate>Thu, 14 Jan 2016 15:09:32 GMT</pubDate></item><item><title><![CDATA[GhostをBusterでGithubPagesにホスティングする]]></title><description><![CDATA[<h2 id="">概要</h2>
+
+<p>Ghost を Buster を利用して静的なサイトとして吐き出して Github Pagesでホスティングする手順と運用方法</p>
+
+<h2 id="ghost">なぜGhostか</h2>
+
+<p>HugoやOctopressなど色々試した結果、最終的にGhostで落ち着きました。</p>
+
+<p>Hugoも導入はラクチンでしたがGhostは管理画面が使いやすいのが決め手でした。</p>
+
+<h2 id="">環境</h2>
+
+<pre><code>OSX Yosemite 10.10.5
+
+% brew -v
+Homebrew 0.9.5  
+% node -v
+v0.10.33  
+% npm -v
+2.1.6  
+</code></pre>
+
+<h2 id="">手順</h2>
+
+<h3 id="nodejs">node.jsのインストール</h3>
+
+<p>wgetはお好みで。</p>
+
+<pre><code>% brew install node
+% brew install wget
+</code></pre>
+
+<h3 id="ghost">Ghostのインストールと起動</h3>
+
+<pre><code>% mkdir ghost
+% cd ghost
+% wget --no-check-certificate https://ghost.org/zip/ghost-0.5.2.zip
+% unzip ghost-0.5.2.zip
+% npm install --production
+% npm start
+</code></pre>
+
+<p>sqlite3のエラーが出る場合は後述。</p>
+
+<h3 id="ghost">Ghostにログイン</h3>
+
+<p><code>http://localhost:2368/ghost</code> でアカウント設定を行い、管理画面へログインできる。</p>
+
+<h3 id="githubpages">GitHubPagesにレポジトリの作成</h3>
+
+<ol>
+<li>GiHubにアクセス  </li>
+<li>+new repository  </li>
+<li><code>username/username.github.io</code>のレポジトリを作成</li>
+</ol>
+
+<h3 id="ghostclone">Ghostのディレクトリに作成したレポジトリをcloneする</h3>
+
+<pre><code>% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git ./static
+</code></pre>
+
+<h3 id="buster">Busterのインストール</h3>
+
+<p>Ghostを静的ページとしてstaticディレクトリ以下に吐き出すためのツールとしてbusterをインストールする。</p>
+
+<p>npm startはそのままにしておきたいので、ターミナルで新しいタブを開いて作業を行う。</p>
+
+<pre><code>% brew install python
+% sudo pip install buster
+</code></pre>
+
+<h3 id="buster">Busterのデプロイ先を設定</h3>
+
+<pre><code>% buster setup --gh-repo=git@github.com:username/username.github.io.git --dir=static
+</code></pre>
+
+<h3 id="ghostbuster">Ghost Buster !!</h3>
+
+<p>Ghostの内容をstatic以下にBusterする。</p>
+
+<p><code>buster deploy</code>コマンドで指定したデプロイ先にpushするまでを行ってくれる。</p>
+
+<pre><code>% pwd /Users/username/ghost
+% buster generate --domain=http://localhost:2368
+% buster preview  #browse http://localhost:9000
+% buster deploy
+Good job! Deployed to Github Pages.  
+</code></pre>
+
+<h3 id="">確認</h3>
+
+<p><a href="https://satoshin2071.github.io/">生成されたページ</a></p>
+
+<h2 id="">運用方法</h2>
+
+<h3 id="staticbitbucket">staticディレクトリは以外はbitbucketで管理する</h3>
+
+<pre><code>% rm -rf static
+% git init
+% git remote add origin bitbucketの管理用リポジトリ
+% git add -A
+% git commit -m 'add'
+% git push -u origin master
+</code></pre>
+
+<h3 id="staticsubmodule">staticディレクトリをsubmoduleとして管理する</h3>
+
+<pre><code>% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git static
+% cd static
+% git submodule init
+% git submodule update
+</code></pre>
+
+<h3 id="">新規記事投稿</h3>
+
+<p>ここまで設定すればあとは以下の手順で記事作成公開できる。</p>
+
+<pre><code>% npm start
+管理画面 http://localhost:2368/ghost へアクセスして記事投稿
+
+% buster generate --domain=http://localhost:2368
+% buster deploy
+</code></pre>
+
+<h2 id="sqlite3">sqlite3まわりでエラーが出る場合</h2>
+
+<p>npm start時に以下のエラーが出てsqlite3のモジュールが見つからないよと言われる場合。再インストールすると上手くいきました。</p>
+
+<p><a href="http://support.ghost.org/troubleshooting/">Ghost Troubleshooting Guide</a></p>
+
+<pre><code>ERROR: Cannot find module '/Users/satoshin2071/ghost/node_modules/sqlite3/lib/binding/node-v14-darwin-x64/node_sqlite3.node'
+
+
+% cd node_modules
+% rm -rf ./sqlite3
+% npm install sqlite3 --build-from-source
+もしくは
+% npm install https://github.com/mapbox/node-sqlite3/tarball/master
+% npm cache clean
+</code></pre>
+
+<h2 id="node">nodeのヴァージョンが違うとき</h2>
+
+<pre><code>Migrations: Up to date at version 003
+
+ERROR: Unsupported version of Node  
+Ghost needs Node version ~0.10.0 you are using version 0.12.2  
+Please go to http://nodejs.org to get a supported version  
+</code></pre>
+
+<p>Package.jsonを修正します。</p>
+
+<pre><code>% vim package.json
+
+"engines": {  
+        "node": "~0.10.0"
+    },
+
+↓
+
+"engines": {  
+        "node": "~0.12.2"
+    },
+
+% npm start
+
+&gt; ghost@0.5.2 start /Users/satoshin2071/ghost
+&gt; node index
+
+Migrations: Up to date at version 003  
+Ghost is running in development...  
+Listening on 127.0.0.1:2368  
+Url configured as: http://localhost:2368  
+Ctrl+C to shut down
+</code></pre>
+
+<p>いけました。</p>
+
+<h2 id="">問題点</h2>
+
+<p>GithubPagesでは外部CSS等を利用できないのでghostのテーマで設定しているフォントが使えない (´・ω・`)</p>
+
+<h2 id="">参考</h2>
+
+<p><a href="https://stefanscherer.github.io/setup-ghost-for-github-pages/">Setup Ghost for GitHub Pages</a></p>
+
+<p><a href="http://xavierriley.co.uk/blogging-with-ghost-buster-and-github-pages/index.html">(RE)STARTING A BLOG WITH GHOST</a></p>
+
+<p><a href="http://qiita.com/sotarok/items/0d525e568a6088f6f6bb">Git Submoduleの基礎</a></p>
+
+<p><a href="http://blog.paulbird.co/running-ghost-in-node-0-12-0/">Running and Installing Ghost on Node 0.12.0</a></p>]]></description><link>http://localhost:2368/ghostwobusterdegithubpagesnihosuteingusuru/</link><guid isPermaLink="false">cb25782c-d759-491b-9263-df0ac27aec01</guid><dc:creator><![CDATA[satoshin]]></dc:creator><pubDate>Thu, 14 Jan 2016 14:09:49 GMT</pubDate></item></channel></rss>
