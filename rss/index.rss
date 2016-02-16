@@ -1,4 +1,130 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 11 Feb 2016 12:53:21 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 16 Feb 2016 13:59:43 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>リモートにあるRailsプロジェクトを落としてローカル環境で動かすまでの備忘録</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;たまにRails触るときに毎回mysqlまわりで躓いて調べているので動かせるところまでのメモです。&lt;/p&gt;
+
+&lt;h2 id=""&gt;環境&lt;/h2&gt;
+
+&lt;p&gt;Mac OSX 10.10.5&lt;/p&gt;
+
+&lt;h2 id=""&gt;前提条件&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;リモートにあるRailsのバージョンは4.2とする&lt;/li&gt;
+&lt;li&gt;DBはmysqlを利用&lt;/li&gt;
+&lt;li&gt;Command Line Toolsのみインストール済&lt;/li&gt;
+&lt;li&gt;homebrewインストール済&lt;/li&gt;
+&lt;li&gt;メモ : &lt;a href="http://www.softantenna.com/wp/mac/os-x-el-capitan-and-homebrew/"&gt;ElCaptinでhomebrewを使いたいとき&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="rbenv"&gt;rbenv&lt;/h2&gt;
+
+&lt;p&gt;rubyのバージョン切り替え用にrbenvをインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew update
+% brew install rbenv ruby-build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;bash/zshrc にパス追加&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[[ -d ~/.rbenv  ]] &amp;amp;&amp;amp; \
+  export PATH=${HOME}/.rbenv/bin:${PATH} &amp;amp;&amp;amp; \
+  eval "$(rbenv init -)"
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;利用したいrubyバージョンをインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% rbenv install -l #version確認
+% rbenb install 2.2.3
+....
+
+% rbenv global 2.2.3 #環境全体をバージョンを統一(よしなに)
+
+% which ruby  #確認
+% ruby -w     #確認
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="mysql"&gt;mysql&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew install mysql
+% brew link mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もしlink時に以下のエラーがでる場合は一度unlinkしてから再度linkを行う&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew link mysql
+Warning: Already linked: /usr/local/Cellar/mysql/5.6.16  
+To relink: brew unlink mysql &amp;amp;&amp;amp; brew link mysql
+
+% brew unlink mysql
+% brew link mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;まだこの時点ではmysqlが起動してないので&lt;code&gt;mysql.server start&lt;/code&gt;を叩く必要がある。マシン起動のたびにstart叩きたくないので自動起動を設定する。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% ln -fs /usr/local/opt/mysql/homebrew.mxcl.mysql.plist ~/Library/LaunchAgents/　#自動起動設定
+
+% launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist #mysql起動
+
+% ps ax | grep mysql #起動しているか確認
+  324   ??  S      0:00.05 /bin/sh /usr/local/opt/mysql/bin/mysqld_safe --bind-address=127.0.0.1 --datadir=/usr/local/var/mysql
+  615   ??  S      0:00.95 /usr/local/Cellar/mysql/5.6.27/bin/mysqld --basedir=/usr/local/Cellar/mysql/5.6.27 --datadir=/usr/local/var/mysql --plugin-dir=/usr/local/Cellar/mysql/5.6.27/lib/plugin --bind-address=127.0.0.1 --log-error=/usr/local/var/mysql/Mac-mini-PC93.local.err --pid-file=/usr/local/var/mysql/Mac-mini-PC93.local.pid
+ 2123 s000  R+     0:00.00 grep mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="bundler"&gt;bundler&lt;/h2&gt;
+
+&lt;p&gt;railsをgitからcloneした後に&lt;code&gt;bundle install&lt;/code&gt;を行うためbundlerを入れる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% gem install bundler --no-document
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;cloneしたRailsのプロジェクトルートで&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% bundle install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="mysql"&gt;MySQLユーザー作成&lt;/h2&gt;
+
+&lt;p&gt;rakeコマンドを叩く事前準備としてmysqlにユーザーを作成する&lt;/p&gt;
+
+&lt;p&gt;Railsプロジェクトのconfigに移動&lt;/p&gt;
+
+&lt;p&gt;config/database.ymlを確認、development用のusername名を確認してmysqlでユーザを作成する。(権限は適宜変更)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% mysql -u root
+
+mysql&amp;gt; create user 'username'@'localhost';  
+mysql&amp;gt; grant all on *.* to username
+
+exit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="db"&gt;DBとテーブル作成&lt;/h2&gt;
+
+&lt;p&gt;とりあえずdevelopmentのみ作成。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rake db:create RAILS_ENV=development  
+rake db:migrate RAILS_ENV=development  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;メモ RAILS_ENV= について&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;RAILS_ENV=&lt;/code&gt;はdatabase.ymlに記述されている環境を選択することができる。&lt;/p&gt;
+
+&lt;p&gt;development_customer: などといった独自の環境がdatabase.ymlに記述されている場合は同様に&lt;code&gt;RAILS_ENV=development_customer&lt;/code&gt; のような形で指定する。&lt;/p&gt;
+
+&lt;h2 id="webrick"&gt;WEBrickで起動&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;% rails s
+=&amp;gt; Booting WEBrick
+=&amp;gt; Rails 4.2.4 application starting in development on http://localhost:3000
+=&amp;gt; Run `rails server -h` for more startup options
+=&amp;gt; Ctrl-C to shutdown server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;mysqlでユーザーつくるの面倒くさいので簡単な方法ないでしょうか&lt;/p&gt;</description><link>http://localhost:2368/rimotoniarurailspuroziekutowoluo-tositerokaruhuan-jing-dedong-kasumadenobei-wang-lu/</link><guid isPermaLink="false">abc2de40-86c0-4880-a59a-997f6e76af78</guid><category>Rails</category><category>MySql</category><dc:creator>satoshin</dc:creator><pubDate>Tue, 16 Feb 2016 13:58:46 GMT</pubDate></item><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href="http://doc.aldebaran.com/2-1/dev/js/index.html"&gt;QiMessagingJavaScript&lt;/a&gt;と&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;を利用し&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt; &amp;amp; &lt;code&gt;Pepperで発火したイベントの通知をiOSで受け取る&lt;/code&gt; を実装したサンプルです。&lt;/p&gt;
 
