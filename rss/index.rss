@@ -1,4 +1,63 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 16 Feb 2016 13:59:43 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>リモートにあるRailsプロジェクトを落としてローカル環境で動かすまでの備忘録</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 07 Mar 2016 13:18:52 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>コードレヴュー時のチートシート</title><description>&lt;h2 id=""&gt;基本&lt;/h2&gt;
+
+&lt;p&gt;&lt;input type="checkbox"&gt;適切な名前か &lt;br&gt;
+&lt;input type="checkbox"&gt;複数の通信が同時に起こった場合は想定できているか &lt;br&gt;
+&lt;input type="checkbox"&gt;適切なシーケンスで処理が行われているか &lt;br&gt;
+&lt;input type="checkbox"&gt;むやみやたらに変数作り過ぎてないか &lt;br&gt;
+&lt;input type="checkbox"&gt;コメントは適切、適量か &lt;br&gt;
+&lt;input type="checkbox"&gt;HeaderDoc等は記述されているか &lt;br&gt;
+&lt;input type="checkbox"&gt;状態変数はなるべく避けることができているか &lt;br&gt;
+&lt;input type="checkbox"&gt;なるべくタイプセーフにできているか &lt;br&gt;
+&lt;input type="checkbox"&gt;ネスト深すぎないか(3以内には) &lt;br&gt;
+&lt;input type="checkbox"&gt;DRYか &lt;br&gt;
+&lt;input type="checkbox"&gt;共通化に囚われすぎてないか &lt;br&gt;
+&lt;input type="checkbox"&gt;言語に元からある機能を使えているか &lt;br&gt;
+&lt;input type="checkbox"&gt;もっと簡潔に書けないか &lt;br&gt;
+&lt;input type="checkbox"&gt;疎結合か &lt;br&gt;
+&lt;input type="checkbox"&gt;メソッド設計は適切か &lt;br&gt;
+&lt;input type="checkbox"&gt;スレッドセーフか &lt;br&gt;
+&lt;input type="checkbox"&gt;アクセスコントロールは適切か &lt;br&gt;
+&lt;input type="checkbox"&gt;インターフェースはシンプルか &lt;br&gt;
+&lt;input type="checkbox"&gt;境界条件(0,nil等)の動作は確認したか &lt;br&gt;
+&lt;input type="checkbox"&gt;テスト書きやすいか &lt;br&gt;
+&lt;input type="checkbox"&gt;テストは通っているか (ViewModel等はできる限り書くべき) &lt;br&gt;
+&lt;input type="checkbox"&gt;影響範囲が限定的な実装か &lt;br&gt;
+&lt;input type="checkbox"&gt;デグレを引き起こす可能性は考えたか &lt;br&gt;
+&lt;input type="checkbox"&gt;処理速度的に著しく悪い場所がないか(簡単にベンチマーク取れるなら要確認) &lt;br&gt;
+&lt;input type="checkbox"&gt;無駄な処理がないか &lt;br&gt;
+&lt;input type="checkbox"&gt;負荷のかかる(かかりそうな)処理となっていないか &lt;br&gt;
+&lt;input type="checkbox"&gt;IOアクセスは最小にとどめられているか&lt;/p&gt;
+
+&lt;h2 id=""&gt;なるべく静的解析ツールに任せる部分&lt;/h2&gt;
+
+&lt;p&gt;&lt;input type="checkbox"&gt;命名規則 &lt;br&gt;
+&lt;input type="checkbox"&gt;良くあるバグリスク&lt;/p&gt;
+
+&lt;h2 id=""&gt;メソッド設計&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;メモ
+&lt;ul&gt;&lt;li&gt;ファンクションメソッド(戻り値あり)&lt;/li&gt;
+&lt;li&gt;プロシージャメソッド(戻り値なし)&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;input type="checkbox"&gt;不必要にメソッドを分割していないか &lt;br&gt;
+&lt;input type="checkbox"&gt;ファンクションメソッド内でインスタンス変数の変更を行う等の副作用はないか？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ファンクションに副作用があっても良い場合
+
+* ファンクション内で一時的にオブジェクトを変更するが終了時に元の状態に必ず戻る場合
+* ファンクション内で外部に公開されていない属性(プライベート属性)を変更するとき。
+※ゲッターのあるプライベート属性は例外に含めず
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://glassonion.hatenablog.com/entry/20100723/1279891256"&gt;メソッド設計で守るべき10個のルール&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://objectclub.jp/technicaldoc/refactoring/refact-smell"&gt;不吉な匂い&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://xn--97-273ae6a4irb6e2hsoiozc2g4b8082p.com/"&gt;プログラマが知るべき97のこと&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/kodorevuyu-titosito/</link><guid isPermaLink="false">93624ed8-3715-428b-aa6c-f5a937b51965</guid><category>コードレヴュー</category><category>チートシート</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 07 Mar 2016 13:17:13 GMT</pubDate></item><item><title>リモートにあるRailsプロジェクトを落としてローカル環境で動かすまでの備忘録</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;たまにRails触るときに毎回mysqlまわりで躓いて調べているので動かせるところまでのメモです。&lt;/p&gt;
 
