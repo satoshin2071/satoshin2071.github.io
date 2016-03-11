@@ -1,4 +1,175 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 07 Mar 2016 13:18:52 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>コードレヴュー時のチートシート</title><description>&lt;h2 id=""&gt;基本&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Fri, 11 Mar 2016 14:15:16 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。&lt;/p&gt;
+
+&lt;p&gt;iOS9.2のシュミレーターを利用していたのですが、コントロールセンターでボタンが表示されない等の現象が発生してましたので実機での検証を想定しています。&lt;/p&gt;
+
+&lt;h2 id=""&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Xcode7.2&lt;/li&gt;
+&lt;li&gt;iOS9系 実機&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;やったこと&lt;/h2&gt;
+
+&lt;h3 id="backgroundaudioairplayon"&gt;Background Audio&amp;amp;AirPlayのチェックボックスをONに&lt;/h3&gt;
+
+&lt;p&gt;Targets名 =&gt; Capabilities =&gt; Background Modes =&gt; Audio&amp;amp;AirPlay&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/----------2016-03-11-23-02-48.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h3 id=""&gt;音声ファイルのパーミッションの設定&lt;/h3&gt;
+
+&lt;p&gt;今回はAVAudioPlayerを利用して楽曲再生を行いました。&lt;/p&gt;
+
+&lt;p&gt;ダウンロードしてストレージに保存した音声ファイルをそのままロック画面で再生しようとすると、パーミッションの関係で&lt;code&gt;AVAudioPlayer play error and the error is Code=-54&lt;/code&gt; エラーが発生します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;NSFileManager.defaultManager.setAttributes&lt;/code&gt;で保存先のパーミッションを&lt;code&gt;NSFileProtectionNone&lt;/code&gt;に変更し上記のエラーに対応しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/index.html#//apple_ref/doc/constant_group/File_Protection_Values"&gt;NSFileManager Class Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/34782100/nsosstatuserrordomain-code-54-for-avaudioplayer"&gt;NSOSStatusErrorDomain Code=-54 for AVAudioPlayer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    // 保存先ディレクトリパス取得
+    func exportDirectoryPath() -&amp;gt; String {
+        guard let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first else {
+            fatalError()
+        }
+        return path + "/" + "Clips"
+    }
+
+...省略
+
+    // 保存先ディレクトリを作成
+    let dirPath = DownloadFilePathAgent.exportDirectoryPath() + "/\(self.task.uuid)"
+    let fileManager:NSFileManager = NSFileManager.defaultManager()
+    do {
+        if fileManager.fileExistsAtPath(dirPath) {
+            try fileManager.removeItemAtPath(dirPath)
+        }
+        try fileManager.createDirectoryAtPath(dirPath, withIntermediateDirectories: true, attributes: nil)
+        // ロック時にも再生できるようにパーミッション変更
+        try fileManager.setAttributes([NSFileProtectionKey: NSFileProtectionNone], ofItemAtPath: dirPath)
+    }
+    catch let error as NSError {
+        //エラー対応
+    }
+
+...省略
+
+    // ファイルダウンロード完了時にもパーミッション変更
+    try! NSFileManager.defaultManager().setAttributes([NSFileProtectionKey: NSFileProtectionNone], ofItemAtPath: filePath)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="avaudiosession"&gt;AVAudioSession生成時にロック画面で再生するカテゴリの指定&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    session = AVAudioSession.sharedInstance()
+
+    //ロック時も再生のカテゴリを指定
+    do {
+        try session?.setCategory(AVAudioSessionCategoryPlayback)
+    }
+    catch let error as NSError {
+        print(error.description)
+    }
+
+    do {
+        //オーディオセッションを有効化
+        try session?.setActive(true)
+    }
+    catch let error as NSError {
+        print(error.description)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;再生ボタン等の表示設定&lt;/h3&gt;
+
+&lt;p&gt;iOS 7.1以降は&lt;code&gt;remoteControlReceivedWithEvent&lt;/code&gt;をオーバライドしてロック画面のハンドリングに対応する方法でなく&lt;code&gt;MPRemoteCommandCenter&lt;/code&gt;を利用するように推奨されています。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPRemoteCommand_Ref/index.html#//apple_ref/occ/cl/MPRemoteCommand"&gt;MPRemoteCommand Class Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;AVAudioSessioを生成した再生まわりを担当するクラスに以下を実装していきます。&lt;/p&gt;
+
+&lt;p&gt;はじめの準備&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    // バックグラウンド対応しますよ 的宣言
+    UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
+
+    // audioPlayer?play()の再生直前に呼び出して即座に再生開始するように
+    audioPlayer?.prepareToPlay()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;表示するボタンと対応する処理の設定&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
+    commandCenter.playCommand.addTarget(self, action: "play")
+    commandCenter.playCommand.enabled = true
+    commandCenter.pauseCommand.addTarget(self, action: "pause")
+    commandCenter.pauseCommand.enabled = true
+    commandCenter.skipForwardCommand.addTarget(self, action: "skipForward")
+    commandCenter.skipForwardCommand.enabled = true
+    commandCenter.skipBackwardCommand.addTarget(self, action: "skipBackward")
+    commandCenter.skipBackwardCommand.enabled = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再生している楽曲情報の設定&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+        MPMediaItemPropertyTitle: "タイトル",
+        MPMediaItemPropertyArtist : "アーティスト名",
+        MPNowPlayingInfoPropertyPlaybackRate : NSNumber(float: 1.0), //シークバー
+        MPMediaItemPropertyPlaybackDuration : NSNumber(double: self.duration)
+    ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;再生中の電話割り込み対応&lt;/h3&gt;
+
+&lt;p&gt;iOS 6以降はAVAudioSessionDelegateがdeprecatedになっているので&lt;code&gt;AVAudioSessionInterruptionNotification&lt;/code&gt;と &lt;br&gt;
+&lt;code&gt;AVAudioSessionRouteChangeNotification&lt;/code&gt;の通知をAppDelegateで登録します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;AppDelegate#didFinishLaunchingWithOptions
+
+// 音声再生時の電話割り込み通知登録
+NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionDidInterrupt", name: AVAudioSessionInterruptionNotification, object: nil)  
+NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionRouteDidChange", name: AVAudioSessionRouteChangeNotification, object: nil)
+
+/**
+ 再生中に電話割り込み時の処理
+ */
+func sessionDidInterrupt() {  
+    // 停止時の処理を呼び出す
+    EpisodePlayService.sharedInstance.pause()
+}
+
+/**
+ 電話終了から再生へ復帰する処理
+ */
+func sessionRouteDidChange(){  
+    // 再生開始処理を呼び出す
+    EpisodePlayService.sharedInstance.play()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;仕上がり&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/IMG_4705-1.PNG" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;備考&lt;/h2&gt;
+
+&lt;p&gt;デフォルトの「ミュージック」のアプリはロック画面のシークバーの把手でコントロールできますがリファレンス等を確認してもその機能は提供されていない模様です。 &lt;/p&gt;
+
+&lt;p&gt;MixCloudやSoundCloud等のアプリにもなかったので多分そうでしょう。&lt;/p&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/naoty_k/items/10164a4239c18830a71a"&gt;iOS6以降のAVAudioSessionのdelegate設定方法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/yimajo/items/c30c4d5f5eab06172028"&gt;かゆいところに手が届きそうなAVFoundationとMediaPlayerによる音楽再生アプリ作成メモ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/RIwai/SimpleLibraryMusicPlayer/blob/d325e6e713113170359e31af87e37135decdc13d/SimpleLibraryMusicPlayer/LocalMusicPlayer.swift"&gt;SimpleLibraryMusicPlayer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/mattneub/Programming-iOS-Book-Examples/tree/master/bk2ch14p643ducking"&gt;Programming-iOS-Book-Examples&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/mpremotecommandcenterdeodeiohuairuzai-sheng-shi-norotukuhua-mian-tokontororusentadenocao-zuo-nidui-ying-suru/</link><guid isPermaLink="false">5bbacbe0-62c1-46ae-b889-4a111b55ca5c</guid><category>iOS</category><category>MPRemoteCommandCenter</category><dc:creator>satoshin</dc:creator><pubDate>Fri, 11 Mar 2016 14:09:41 GMT</pubDate></item><item><title>コードレヴュー時のチートシート</title><description>&lt;h2 id=""&gt;基本&lt;/h2&gt;
 
 &lt;p&gt;&lt;input type="checkbox"&gt;適切な名前か &lt;br&gt;
 &lt;input type="checkbox"&gt;複数の通信が同時に起こった場合は想定できているか &lt;br&gt;
