@@ -1,24 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 02 Apr 2016 14:47:11 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;パルコで開催していたTOMATOに展覧会いってきました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4736-2.JPG" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;自分の世代だとトレインスポッティングだったりVHS使ったVJのイメージですが、最近はお洋服とかもつくってるのですね👀&lt;/p&gt;
-
-&lt;p&gt;展示会場のTVの前にGearVRがあったので先日のストリーミング配信の何かが見れるかと期待したのですが、なぜかスマホは取外されていた状態でした…。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.gizmodo.jp/2016/03/post_664283.html"&gt;Gear VRで見るアンダーワールドの未来感がすごかった&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;とにもかくにもUnderworld熱が高まったのでサマソニ2016参戦しようと思います😃&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4715.JPG" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4719-1.JPG" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4722.JPG" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4729-1.JPG" alt=""&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/the-tomato-project-25th-anniversary-exhibition-o/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 02 Apr 2016 15:02:52 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。&lt;/p&gt;
 
