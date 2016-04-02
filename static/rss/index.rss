@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 02 Apr 2016 14:50:42 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 02 Apr 2016 15:08:22 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;渋谷パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4736-2.JPG" alt=""&gt;&lt;/p&gt;
 
@@ -18,7 +18,7 @@
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4729-1.JPG" alt=""&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/the-tomato-project-25th-anniversary-exhibition-o/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/tomato-exhibition/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。&lt;/p&gt;
 
