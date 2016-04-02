@@ -1,0 +1,830 @@
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 02 Apr 2016 14:50:42 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4736-2.JPG" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;自分の世代だとトレインスポッティングだったりVHS使ったVJのイメージですが、最近はお洋服とかもつくってるのですね👀&lt;/p&gt;
+
+&lt;p&gt;展示会場のTVの前にGearVRがあったので先日のストリーミング配信の何かが見れるかと期待したのですが、なぜかスマホは取外されていた状態でした…。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.gizmodo.jp/2016/03/post_664283.html"&gt;Gear VRで見るアンダーワールドの未来感がすごかった&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;とにもかくにもUnderworld熱が高まったのでサマソニ2016参戦しようと思います😃&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4715.JPG" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4719-1.JPG" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4722.JPG" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4729-1.JPG" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/the-tomato-project-25th-anniversary-exhibition-o/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。&lt;/p&gt;
+
+&lt;p&gt;iOS9.2のシュミレーターを利用していたのですが、コントロールセンターでボタンが表示されない等の現象が発生してましたので実機での検証を想定しています。&lt;/p&gt;
+
+&lt;h2 id=""&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Xcode7.2&lt;/li&gt;
+&lt;li&gt;iOS9系 実機&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;やったこと&lt;/h2&gt;
+
+&lt;h3 id="backgroundaudioairplayon"&gt;Background Audio&amp;amp;AirPlayのチェックボックスをONに&lt;/h3&gt;
+
+&lt;p&gt;Targets名 =&gt; Capabilities =&gt; Background Modes =&gt; Audio&amp;amp;AirPlay&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/----------2016-03-11-23-02-48.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h3 id=""&gt;音声ファイルのパーミッションの設定&lt;/h3&gt;
+
+&lt;p&gt;今回はAVAudioPlayerを利用して楽曲再生を行いました。&lt;/p&gt;
+
+&lt;p&gt;ダウンロードしてストレージに保存した音声ファイルをそのままロック画面で再生しようとすると、パーミッションの関係で&lt;code&gt;AVAudioPlayer play error and the error is Code=-54&lt;/code&gt; エラーが発生します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;NSFileManager.defaultManager.setAttributes&lt;/code&gt;で保存先のパーミッションを&lt;code&gt;NSFileProtectionNone&lt;/code&gt;に変更し上記のエラーに対応しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/index.html#//apple_ref/doc/constant_group/File_Protection_Values"&gt;NSFileManager Class Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/34782100/nsosstatuserrordomain-code-54-for-avaudioplayer"&gt;NSOSStatusErrorDomain Code=-54 for AVAudioPlayer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    // 保存先ディレクトリパス取得
+    func exportDirectoryPath() -&amp;gt; String {
+        guard let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first else {
+            fatalError()
+        }
+        return path + "/" + "Clips"
+    }
+
+...省略
+
+    // 保存先ディレクトリを作成
+    let dirPath = DownloadFilePathAgent.exportDirectoryPath() + "/\(self.task.uuid)"
+    let fileManager:NSFileManager = NSFileManager.defaultManager()
+    do {
+        if fileManager.fileExistsAtPath(dirPath) {
+            try fileManager.removeItemAtPath(dirPath)
+        }
+        try fileManager.createDirectoryAtPath(dirPath, withIntermediateDirectories: true, attributes: nil)
+        // ロック時にも再生できるようにパーミッション変更
+        try fileManager.setAttributes([NSFileProtectionKey: NSFileProtectionNone], ofItemAtPath: dirPath)
+    }
+    catch let error as NSError {
+        //エラー対応
+    }
+
+...省略
+
+    // ファイルダウンロード完了時にもパーミッション変更
+    try! NSFileManager.defaultManager().setAttributes([NSFileProtectionKey: NSFileProtectionNone], ofItemAtPath: filePath)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="avaudiosession"&gt;AVAudioSession生成時にロック画面で再生するカテゴリの指定&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    session = AVAudioSession.sharedInstance()
+
+    //ロック時も再生のカテゴリを指定
+    do {
+        try session?.setCategory(AVAudioSessionCategoryPlayback)
+    }
+    catch let error as NSError {
+        print(error.description)
+    }
+
+    do {
+        //オーディオセッションを有効化
+        try session?.setActive(true)
+    }
+    catch let error as NSError {
+        print(error.description)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;再生ボタン等の表示設定&lt;/h3&gt;
+
+&lt;p&gt;iOS 7.1以降は&lt;code&gt;remoteControlReceivedWithEvent&lt;/code&gt;をオーバライドしてロック画面のハンドリングに対応する方法でなく&lt;code&gt;MPRemoteCommandCenter&lt;/code&gt;を利用するように推奨されています。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPRemoteCommand_Ref/index.html#//apple_ref/occ/cl/MPRemoteCommand"&gt;MPRemoteCommand Class Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;AVAudioSessioを生成した再生まわりを担当するクラスに以下を実装していきます。&lt;/p&gt;
+
+&lt;p&gt;はじめの準備&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    // バックグラウンド対応しますよ 的宣言
+    UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
+
+    // audioPlayer?play()の再生直前に呼び出して即座に再生開始するように
+    audioPlayer?.prepareToPlay()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;表示するボタンと対応する処理の設定&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
+    commandCenter.playCommand.addTarget(self, action: "play")
+    commandCenter.playCommand.enabled = true
+    commandCenter.pauseCommand.addTarget(self, action: "pause")
+    commandCenter.pauseCommand.enabled = true
+    commandCenter.skipForwardCommand.addTarget(self, action: "skipForward")
+    commandCenter.skipForwardCommand.enabled = true
+    commandCenter.skipBackwardCommand.addTarget(self, action: "skipBackward")
+    commandCenter.skipBackwardCommand.enabled = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再生している楽曲情報の設定&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;    MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+        MPMediaItemPropertyTitle: "タイトル",
+        MPMediaItemPropertyArtist : "アーティスト名",
+        MPNowPlayingInfoPropertyPlaybackRate : NSNumber(float: 1.0), //シークバー
+        MPMediaItemPropertyPlaybackDuration : NSNumber(double: self.duration)
+    ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;再生中の電話割り込み対応&lt;/h3&gt;
+
+&lt;p&gt;iOS 6以降はAVAudioSessionDelegateがdeprecatedになっているので&lt;code&gt;AVAudioSessionInterruptionNotification&lt;/code&gt;と &lt;br&gt;
+&lt;code&gt;AVAudioSessionRouteChangeNotification&lt;/code&gt;の通知をAppDelegateで登録します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="Swift"&gt;AppDelegate#didFinishLaunchingWithOptions
+
+// 音声再生時の電話割り込み通知登録
+NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionDidInterrupt", name: AVAudioSessionInterruptionNotification, object: nil)  
+NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionRouteDidChange", name: AVAudioSessionRouteChangeNotification, object: nil)
+
+/**
+ 再生中に電話割り込み時の処理
+ */
+func sessionDidInterrupt() {  
+    // 停止時の処理を呼び出す
+    EpisodePlayService.sharedInstance.pause()
+}
+
+/**
+ 電話終了から再生へ復帰する処理
+ */
+func sessionRouteDidChange(){  
+    // 再生開始処理を呼び出す
+    EpisodePlayService.sharedInstance.play()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;仕上がり&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/IMG_4705-1.PNG" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;備考&lt;/h2&gt;
+
+&lt;p&gt;デフォルトの「ミュージック」のアプリはロック画面のシークバーの把手でコントロールできますがリファレンス等を確認してもその機能は提供されていない模様です。 &lt;/p&gt;
+
+&lt;p&gt;MixCloudやSoundCloud等のアプリにもなかったので多分そうでしょう。&lt;/p&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/naoty_k/items/10164a4239c18830a71a"&gt;iOS6以降のAVAudioSessionのdelegate設定方法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/yimajo/items/c30c4d5f5eab06172028"&gt;かゆいところに手が届きそうなAVFoundationとMediaPlayerによる音楽再生アプリ作成メモ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/RIwai/SimpleLibraryMusicPlayer/blob/d325e6e713113170359e31af87e37135decdc13d/SimpleLibraryMusicPlayer/LocalMusicPlayer.swift"&gt;SimpleLibraryMusicPlayer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/mattneub/Programming-iOS-Book-Examples/tree/master/bk2ch14p643ducking"&gt;Programming-iOS-Book-Examples&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/mpremotecommandcenterdeodeiohuairuzai-sheng-shi-norotukuhua-mian-tokontororusentadenocao-zuo-nidui-ying-suru/</link><guid isPermaLink="false">5bbacbe0-62c1-46ae-b889-4a111b55ca5c</guid><category>iOS</category><category>MPRemoteCommandCenter</category><dc:creator>satoshin</dc:creator><pubDate>Fri, 11 Mar 2016 14:09:41 GMT</pubDate></item><item><title>コードレヴュー時のチートシート</title><description>&lt;h2 id=""&gt;基本&lt;/h2&gt;
+
+&lt;p&gt;&lt;input type="checkbox"&gt;適切な名前か &lt;br&gt;
+&lt;input type="checkbox"&gt;複数の通信が同時に起こった場合は想定できているか &lt;br&gt;
+&lt;input type="checkbox"&gt;適切なシーケンスで処理が行われているか &lt;br&gt;
+&lt;input type="checkbox"&gt;むやみやたらに変数作り過ぎてないか &lt;br&gt;
+&lt;input type="checkbox"&gt;コメントは適切、適量か &lt;br&gt;
+&lt;input type="checkbox"&gt;HeaderDoc等は記述されているか &lt;br&gt;
+&lt;input type="checkbox"&gt;状態変数はなるべく避けることができているか &lt;br&gt;
+&lt;input type="checkbox"&gt;なるべくタイプセーフにできているか &lt;br&gt;
+&lt;input type="checkbox"&gt;ネスト深すぎないか(3以内には) &lt;br&gt;
+&lt;input type="checkbox"&gt;DRYか &lt;br&gt;
+&lt;input type="checkbox"&gt;共通化に囚われすぎてないか &lt;br&gt;
+&lt;input type="checkbox"&gt;言語に元からある機能を使えているか &lt;br&gt;
+&lt;input type="checkbox"&gt;もっと簡潔に書けないか &lt;br&gt;
+&lt;input type="checkbox"&gt;疎結合か &lt;br&gt;
+&lt;input type="checkbox"&gt;メソッド設計は適切か &lt;br&gt;
+&lt;input type="checkbox"&gt;スレッドセーフか &lt;br&gt;
+&lt;input type="checkbox"&gt;アクセスコントロールは適切か &lt;br&gt;
+&lt;input type="checkbox"&gt;インターフェースはシンプルか &lt;br&gt;
+&lt;input type="checkbox"&gt;境界条件(0,nil等)の動作は確認したか &lt;br&gt;
+&lt;input type="checkbox"&gt;テスト書きやすいか &lt;br&gt;
+&lt;input type="checkbox"&gt;テストは通っているか (ViewModel等はできる限り書くべき) &lt;br&gt;
+&lt;input type="checkbox"&gt;影響範囲が限定的な実装か &lt;br&gt;
+&lt;input type="checkbox"&gt;デグレを引き起こす可能性は考えたか &lt;br&gt;
+&lt;input type="checkbox"&gt;処理速度的に著しく悪い場所がないか(簡単にベンチマーク取れるなら要確認) &lt;br&gt;
+&lt;input type="checkbox"&gt;無駄な処理がないか &lt;br&gt;
+&lt;input type="checkbox"&gt;負荷のかかる(かかりそうな)処理となっていないか &lt;br&gt;
+&lt;input type="checkbox"&gt;IOアクセスは最小にとどめられているか&lt;/p&gt;
+
+&lt;h2 id=""&gt;なるべく静的解析ツールに任せる部分&lt;/h2&gt;
+
+&lt;p&gt;&lt;input type="checkbox"&gt;命名規則 &lt;br&gt;
+&lt;input type="checkbox"&gt;良くあるバグリスク&lt;/p&gt;
+
+&lt;h2 id=""&gt;メソッド設計&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;メモ
+&lt;ul&gt;&lt;li&gt;ファンクションメソッド(戻り値あり)&lt;/li&gt;
+&lt;li&gt;プロシージャメソッド(戻り値なし)&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;input type="checkbox"&gt;不必要にメソッドを分割していないか &lt;br&gt;
+&lt;input type="checkbox"&gt;ファンクションメソッド内でインスタンス変数の変更を行う等の副作用はないか？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ファンクションに副作用があっても良い場合
+
+* ファンクション内で一時的にオブジェクトを変更するが終了時に元の状態に必ず戻る場合
+* ファンクション内で外部に公開されていない属性(プライベート属性)を変更するとき。
+※ゲッターのあるプライベート属性は例外に含めず
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://glassonion.hatenablog.com/entry/20100723/1279891256"&gt;メソッド設計で守るべき10個のルール&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://objectclub.jp/technicaldoc/refactoring/refact-smell"&gt;不吉な匂い&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://xn--97-273ae6a4irb6e2hsoiozc2g4b8082p.com/"&gt;プログラマが知るべき97のこと&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/kodorevuyu-titosito/</link><guid isPermaLink="false">93624ed8-3715-428b-aa6c-f5a937b51965</guid><category>コードレヴュー</category><category>チートシート</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 07 Mar 2016 13:17:13 GMT</pubDate></item><item><title>リモートにあるRailsプロジェクトを落としてローカル環境で動かすまでの備忘録</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;たまにRails触るときに毎回mysqlまわりで躓いて調べているので動かせるところまでのメモです。&lt;/p&gt;
+
+&lt;h2 id=""&gt;環境&lt;/h2&gt;
+
+&lt;p&gt;Mac OSX 10.10.5&lt;/p&gt;
+
+&lt;h2 id=""&gt;前提条件&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;リモートにあるRailsのバージョンは4.2とする&lt;/li&gt;
+&lt;li&gt;DBはmysqlを利用&lt;/li&gt;
+&lt;li&gt;Command Line Toolsのみインストール済&lt;/li&gt;
+&lt;li&gt;homebrewインストール済&lt;/li&gt;
+&lt;li&gt;メモ : &lt;a href="http://www.softantenna.com/wp/mac/os-x-el-capitan-and-homebrew/"&gt;ElCaptinでhomebrewを使いたいとき&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="rbenv"&gt;rbenv&lt;/h2&gt;
+
+&lt;p&gt;rubyのバージョン切り替え用にrbenvをインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew update
+% brew install rbenv ruby-build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;bash/zshrc にパス追加&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[[ -d ~/.rbenv  ]] &amp;amp;&amp;amp; \
+  export PATH=${HOME}/.rbenv/bin:${PATH} &amp;amp;&amp;amp; \
+  eval "$(rbenv init -)"
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;利用したいrubyバージョンをインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% rbenv install -l #version確認
+% rbenb install 2.2.3
+....
+
+% rbenv global 2.2.3 #環境全体をバージョンを統一(よしなに)
+
+% which ruby  #確認
+% ruby -w     #確認
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="mysql"&gt;mysql&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew install mysql
+% brew link mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もしlink時に以下のエラーがでる場合は一度unlinkしてから再度linkを行う&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew link mysql
+Warning: Already linked: /usr/local/Cellar/mysql/5.6.16  
+To relink: brew unlink mysql &amp;amp;&amp;amp; brew link mysql
+
+% brew unlink mysql
+% brew link mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;まだこの時点ではmysqlが起動してないので&lt;code&gt;mysql.server start&lt;/code&gt;を叩く必要がある。マシン起動のたびにstart叩きたくないので自動起動を設定する。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% ln -fs /usr/local/opt/mysql/homebrew.mxcl.mysql.plist ~/Library/LaunchAgents/　#自動起動設定
+
+% launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist #mysql起動
+
+% ps ax | grep mysql #起動しているか確認
+  324   ??  S      0:00.05 /bin/sh /usr/local/opt/mysql/bin/mysqld_safe --bind-address=127.0.0.1 --datadir=/usr/local/var/mysql
+  615   ??  S      0:00.95 /usr/local/Cellar/mysql/5.6.27/bin/mysqld --basedir=/usr/local/Cellar/mysql/5.6.27 --datadir=/usr/local/var/mysql --plugin-dir=/usr/local/Cellar/mysql/5.6.27/lib/plugin --bind-address=127.0.0.1 --log-error=/usr/local/var/mysql/Mac-mini-PC93.local.err --pid-file=/usr/local/var/mysql/Mac-mini-PC93.local.pid
+ 2123 s000  R+     0:00.00 grep mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="bundler"&gt;bundler&lt;/h2&gt;
+
+&lt;p&gt;railsをgitからcloneした後に&lt;code&gt;bundle install&lt;/code&gt;を行うためbundlerを入れる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% gem install bundler --no-document
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;cloneしたRailsのプロジェクトルートで&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% bundle install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="mysql"&gt;MySQLユーザー作成&lt;/h2&gt;
+
+&lt;p&gt;rakeコマンドを叩く事前準備としてmysqlにユーザーを作成する&lt;/p&gt;
+
+&lt;p&gt;Railsプロジェクトのconfigに移動&lt;/p&gt;
+
+&lt;p&gt;config/database.ymlを確認、development用のusername名を確認してmysqlでユーザを作成する。(権限は適宜変更)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% mysql -u root
+
+mysql&amp;gt; create user 'username'@'localhost';  
+mysql&amp;gt; grant all on *.* to username
+
+exit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="db"&gt;DBとテーブル作成&lt;/h2&gt;
+
+&lt;p&gt;とりあえずdevelopmentのみ作成。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rake db:create RAILS_ENV=development  
+rake db:migrate RAILS_ENV=development  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;メモ RAILS_ENV= について&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;RAILS_ENV=&lt;/code&gt;はdatabase.ymlに記述されている環境を選択することができる。&lt;/p&gt;
+
+&lt;p&gt;development_customer: などといった独自の環境がdatabase.ymlに記述されている場合は同様に&lt;code&gt;RAILS_ENV=development_customer&lt;/code&gt; のような形で指定する。&lt;/p&gt;
+
+&lt;h2 id="webrick"&gt;WEBrickで起動&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;% rails s
+=&amp;gt; Booting WEBrick
+=&amp;gt; Rails 4.2.4 application starting in development on http://localhost:3000
+=&amp;gt; Run `rails server -h` for more startup options
+=&amp;gt; Ctrl-C to shutdown server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;mysqlでユーザーつくるの面倒くさいので簡単な方法ないでしょうか&lt;/p&gt;</description><link>http://localhost:2368/rimotoniarurailspuroziekutowoluo-tositerokaruhuan-jing-dedong-kasumadenobei-wang-lu/</link><guid isPermaLink="false">abc2de40-86c0-4880-a59a-997f6e76af78</guid><category>Rails</category><category>MySql</category><dc:creator>satoshin</dc:creator><pubDate>Tue, 16 Feb 2016 13:58:46 GMT</pubDate></item><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://doc.aldebaran.com/2-1/dev/js/index.html"&gt;QiMessagingJavaScript&lt;/a&gt;と&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;を利用し&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt; &amp;amp; &lt;code&gt;Pepperで発火したイベントの通知をiOSで受け取る&lt;/code&gt; を実装したサンプルです。&lt;/p&gt;
+
+&lt;p&gt;iOS側のサンプルはObjCで実装を行っています。&lt;/p&gt;
+
+&lt;p&gt;JavaScriptでのpepperとやりとりする部分は先にAndroidで実装していたものを参考にさせて頂きました。感謝です。&lt;/p&gt;
+
+&lt;h2 id=""&gt;注意点&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Pepperと同じネットワークに接続している必要あり&lt;/li&gt;
+&lt;li&gt;Xcodeの&lt;a href="http://qiita.com/cheeeeese/items/792d5c4d8710cd207b54"&gt;ATSの設定を無効にする&lt;/a&gt;必要あり&lt;/li&gt;
+&lt;li&gt;実機で検証しました。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="pepper"&gt;Pepper側&lt;/h2&gt;
+
+&lt;p&gt;今回Pepper側で実装するのはイベントを発火させるだけの処理です。 &lt;code&gt;advancedボックスライブラリ &amp;gt; Memory &amp;gt; Raise Eventボックス&lt;/code&gt;を配置し、適当な変数名「PepperQiMessaging/test」を設定します。この変数名に紐づくPepperのメモリイベントをiOS側のJavaScriptで監視することによってイベントを受け取ることが可能になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/satoshin2071/Samples/master/Projects/ToBridgeOfPepperAndiOSSample/raiseEvent.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id="ios"&gt;iOS側&lt;/h2&gt;
+
+&lt;p&gt;WebViewでJavaScriptが記述してあるHTMLファイルを読み込んでやりとりを行います。細かい手順は以下です。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;QiMessaging JavaScript&lt;/code&gt;ライブラリを読み込んであるHTMLファイルをUIWebViewで開く  &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WebViewJavascriptBridge&lt;/code&gt;を利用してObjCとjavascriptをbridgeさせる  &lt;/li&gt;
+&lt;li&gt;JavaScriptの命令を実行することでPepperのNAOqiのAPIに対して操作コマンドを送る、またはpepperのイベントを受け取ってObjCの処理を呼び出す&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleApp.html 読み込んでいるjsライブラリ
+
+&amp;lt;script type="text/javascript" src="jquery.min.js"&amp;gt;&amp;lt;/script&amp;gt;  
+&amp;lt;script type="text/javascript" src="socket.io.min.js"&amp;gt;&amp;lt;/script&amp;gt;  
+&amp;lt;script type="text/javascript" src="qi.js"&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href="http://dev.classmethod.jp/references/iso-7-javascriptcore-jquery-underscore/"&gt;JavaScriptCore.frameworkで外部ライブラリは利用できない模様&lt;/a&gt;なのでWebView主体の方法で実装しています。&lt;/p&gt;
+
+&lt;h3 id="iospepper"&gt;iOSからPepperに命令を送る&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;QiSessionを生成してpepperとリアルタイムチャット接続を確立する  &lt;/li&gt;
+&lt;li&gt;pepperに命令を送るためにALProxyのインスタンスを保持  &lt;/li&gt;
+&lt;li&gt;登録したメソッドをObjCで呼び出す&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;InterfaceBuilderで適当にボタンを配置し、押したときの &lt;code&gt;connect&lt;/code&gt;メソッドの中身を以下のように実装します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ViewController
+
+/**
+ *  pepperと接続開始コマンドを送る
+ *
+ *  @param sender
+ */
+- (IBAction)connect:(UIButton *)sender
+{
+    [self.bridge callHandler:@"startConnect" data:PepperIPAddress responseCallback:^(id response) {
+        NSLog(@"接続するためのjsを叩いたコールバック: %@", response);
+    }];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接続成功時に&lt;code&gt;init()&lt;/code&gt;と&lt;code&gt;observe()&lt;/code&gt;を呼び出し、ALProxyのインスタンスを保持、ALMemoryのイベントの監視を開始します(後述)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleApp.html
+
+// pepperと通信を開始する
+bridge.registerHandler('startConnect', function(data, responseCallback) {  
+log('Call Connnect to Pepper With IPAddress : ', data)
+
+    qiSession = new QiSession(data);
+    qiSession.socket().on('connect', function(){
+
+                          qiSession.service("ALTextToSpeech").done(function(tts){tts.say("接続しました。");})
+
+                          init();
+                          observe();
+
+                          var responseData = { 'Javascript Says':'Right back atcha!' }
+                          log('connect Success !!', responseData)
+                          responseCallback(responseData)
+
+                          })
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接続に成功したら、あとは命令を送るだけです。ViewControllerでボタンを押したら挨拶する処理を追記します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ViewController.m
+
+/**
+ *  挨拶コマンドを送る
+ *
+ *  @param sender
+ */
+- (IBAction)hello:(UIButton *)sender
+{
+    [self.bridge callHandler:@"hello" data:@"こんにちは、ペッパーです。" responseCallback:^(id response) {
+        NSLog(@"挨拶するためのjsを叩いたコールバック: %@", response);
+    }];
+}
+
+ExampleApp.html
+
+// 挨拶コマンドを送る
+bridge.registerHandler('hello', function(data, responseCallback) {  
+          log('Call Send Command to next ')
+
+          self.textToSpeech.say(data);
+
+          responseCallback("コールバックあれば渡す")
+          })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ボタン押したらpepperがしゃべるはず！&lt;/p&gt;
+
+&lt;h3 id="pepperios"&gt;pepperで発火したイベントの通知をiOSで受け取る&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;QiSessionを生成してpepperとリアルタイムチャット接続を確立する  &lt;/li&gt;
+&lt;li&gt;iOS側のjsでイベントを受け取るためにALMemoryのイベントの監視する  &lt;/li&gt;
+&lt;li&gt;Choregrapheでアプリケーションを再生させてイベントを発火させる  &lt;/li&gt;
+&lt;li&gt;対応する処理に通知されiOS側で処理を実行する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;手順1. は&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt;の初期化処理です。接続成功時に&lt;code&gt;observe()&lt;/code&gt;を呼び出し&lt;code&gt;ALMemory.subscriber&lt;/code&gt;によるイベントの監視登録を行っています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleApp.html
+
+function observe(){  
+log('イベントコールバック登録')
+
+  qiSession.service("ALMemory").done(function(am){
+
+    // コレグラフの「RaiseEvent」ボックスで登録した「PepperQiMessaging/test」イベントが発火したときに呼ばれるメソッド
+    am.subscriber("PepperQiMessaging/test").done(function(subscriber){
+       subscriber.signal.connect(function(value){
+
+                                 /* 発火時に実行したい処理 */
+                                 bridge.callHandler('pepperEvent', {'foo': 'bar'}, function(response) {
+                                                    log('ペッパーイベント発火時のresponse', response)
+
+                                                    })
+                                 });
+        });
+     });
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ViewControllerでペッパーが発火させたイベントのコールバックを受け取る処理をViewDidLoadあたりで呼び出して登録しておきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ViewController.m
+
+[self.bridge registerHandler:@"pepperEvent" handler:^(id data, WVJBResponseCallback responseCallback) {
+    NSLog(@"ペッパーが発火したイベントをObjCで受け取るサンプル %@", data);
+    responseCallback(@"ObjCで受け取ったかどうかはNSLogで確認");
+}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Choregrapheでアプリケーションの再生ボタンを押したらiPhoneシュミレータとXcodeにログがでるはず！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/satoshin2071/Samples/tree/master/Projects/ToBridgeOfPepperAndiOSSample"&gt;プロジェクトファイルはこちら&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;h2 id="todo"&gt;TODO&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Choregrapheのバーチャルロボットと繋ぐ方法&lt;/li&gt;
+&lt;li&gt;iOSのWebViewで読み込むHTMLファイルのJS部分がネストしてて色々キツイのでどうにかしたい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;参考にさせて頂きました。ありがとうございます。&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/Atelier-Akihabara/items/716e88b306db12751c9b"&gt;PepperタブレットにおけるJavaScript活用コンテンツ(QiMessaging JavaScript)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/qimessagingdeiostopepperwoxiang-hu-niyaritorisurusanpuru/</link><guid isPermaLink="false">93427c8d-7d60-4266-8a5f-a45fd5c51f99</guid><category>iOS</category><category>pepper</category><category>objC</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 08 Feb 2016 14:45:36 GMT</pubDate></item><item><title>Swiftことはじめ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;iOSエンジニアとしては遅ればせながら、2015年12月頭にオープンソース化してくらいから本腰入れてSwiftを学び始めました。&lt;/p&gt;
+
+&lt;p&gt;Swiftという言語そのもの以外にもFunctionalReactiveProgramming、MVVM、などモダンな開発tipsにあまり慣れていないので、Swiftの機能を存分に利用した堅牢な開発を当面の目標にしてみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;まあ兎にも角にも新しい言語で書くのって楽しいですよね(●´ڡ`●)&lt;/p&gt;
+
+&lt;p&gt;言語仕様に対する疑問点については今後書いていきたいと思いますので、まずは学習しはじめた際に利用したサイトやハマったとこのメモをまとめます。&lt;/p&gt;
+
+&lt;h2 id="swifttips"&gt;Swiftを学ぶにあたって先人達のtips&lt;/h2&gt;
+
+&lt;p&gt;言語仕様は当然ながら公式リファレンスやGitHubを読むとして、補足資料としての日本語
+記事はやはり参考になります。自分の言葉で噛み砕いて追記してくれてるとスッと入ってきますよね。英単語のボキャブラリを増やさねば…&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://seeku.hateblo.jp/entry/2014/06/05/182519"&gt;The Swift Programming Languageのメモ（その１）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://swiftrithm.com/"&gt;SWIFTRITHM&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://tea-leaves.jp/swift/content/swift"&gt;Swift言語を学ぶ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;コーディング規約&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/jarinosuke/swift-style-guide/blob/master/README_JP.md"&gt;github&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/wantedly/swift-style-guide/blob/master/README.md"&gt;wantedly&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/dekatotoro/swift-style-guide/blob/master/ja_style_guide.md"&gt;raywenderlich.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="swift"&gt;Swiftの最新情報を得るために&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/apple/swift-evolution"&gt;swift-evolution&lt;/a&gt;などswift関連のレポジトリをwatchする&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/trending?l=swift"&gt;Trending repositories&lt;/a&gt;チェックする&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.iosdevbot.com/"&gt;iOSdevbot&lt;/a&gt;をチェックする&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/potatotips/potatotips/wiki"&gt;potatotips&lt;/a&gt;をチェックする&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.appcoda.com/"&gt;appcode&lt;/a&gt;をチェックする&lt;/li&gt;
+&lt;li&gt;3月に行われる&lt;code&gt;try! Swift&lt;/code&gt;カンファレンスの発起人の&lt;a href="http://nshipster.com/"&gt;NSHipster&lt;/a&gt;のContributorsの方々や&lt;a href="https://www.objc.io/"&gt;objc.io&lt;/a&gt;を立ち上げた御三方をTwitter,Github等でフォローしてチェックする&lt;/li&gt;
+&lt;li&gt;twitterで#swiftlangをチェックする&lt;/li&gt;
+&lt;li&gt;Qiita の Swiftタグをチェックする&lt;/li&gt;
+&lt;li&gt;似たようなフォーマットの週刊ブログ。&lt;a href="http://curated.co/"&gt;curated&lt;/a&gt;ってサービス流行ってるんですかね。
+&lt;ul&gt;&lt;li&gt;&lt;a href="http://indieiosfocus.curated.co/"&gt;Indie iOS Focus Weekly&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://swiftnews.curated.co/"&gt;This Week in Swift&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;ジェネリクスが理解できない&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://tech.recruit-mp.co.jp/mobile/studying-swift-generitics/"&gt;この記事&lt;/a&gt;の解説が非常にわかりやすくてすごい感謝&lt;/p&gt;
+
+&lt;h2 id="cocoapodscarthage"&gt;CocoaPodsとCarthageの違いについて&lt;/h2&gt;
+
+&lt;p&gt;そもそも目的とユースケースが違ったんですね。
+&lt;a href="http://qiita.com/nori0620/items/b81ae171f0e82b0c2d8a"&gt;http://qiita.com/nori0620/items/b81ae171f0e82b0c2d8a&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id="cococapodplaygroud"&gt;CococaPodで導入したライブラリをPlaygroudで使う&lt;/h2&gt;
+
+&lt;p&gt;Playgroud上で&lt;code&gt;import ライブラリ名&lt;/code&gt;としても &lt;code&gt;No Such Module 〜&lt;/code&gt;として怒られます。&lt;/p&gt;
+
+&lt;p&gt;対応としては、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Manage Schemesからライブラリのスキーム追加して一度ビルドする。&lt;/li&gt;
+&lt;li&gt;右ペインを開いてPlatformの設定をOSXからiOSに変更すること&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;などといったことを行えばエラーが解消されるはずですが、ホントに一度ビルドする必要があるのか、本当にこれであってるのかは未検証です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Scheme -&amp;gt; Manage Schemes...
+
+checked Alamofire checkbox　→　Build Alamofire scheme  
+and, you should change settings Playground:
+
+View -&amp;gt; Utilities -&amp;gt; Show File Inspector
+
+Platform OSX → iOS  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="todo"&gt;TODO&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;objCにはないSwift独特の書き方を抽出してまとめていく。&lt;/li&gt;
+&lt;li&gt;iOS以外にもSwiftを活用する事例をさがしてコードリーディングする&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/swiftkotohazime/</link><guid isPermaLink="false">959145b3-16a3-43cd-8afc-330a88c686e1</guid><category>Swift</category><category>iOS</category><dc:creator>satoshin</dc:creator><pubDate>Thu, 14 Jan 2016 15:09:32 GMT</pubDate></item><item><title>GhostをBusterでGithubPagesにホスティングする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;Ghost を Buster を利用して静的なサイトとして吐き出して Github Pagesでホスティングする手順と運用方法&lt;/p&gt;
+
+&lt;h2 id="ghost"&gt;なぜGhostか&lt;/h2&gt;
+
+&lt;p&gt;HugoやOctopressなど色々試した結果、最終的にGhostで落ち着きました。&lt;/p&gt;
+
+&lt;p&gt;Hugoも導入はラクチンでしたがGhostは管理画面が使いやすいのが決め手でした。&lt;/p&gt;
+
+&lt;h2 id=""&gt;環境&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;OSX Yosemite 10.10.5
+
+% brew -v
+Homebrew 0.9.5  
+% node -v
+v0.10.33  
+% npm -v
+2.1.6  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;手順&lt;/h2&gt;
+
+&lt;h3 id="nodejs"&gt;node.jsのインストール&lt;/h3&gt;
+
+&lt;p&gt;wgetはお好みで。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew install node
+% brew install wget
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="ghost"&gt;Ghostのインストールと起動&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% mkdir ghost
+% cd ghost
+% wget --no-check-certificate https://ghost.org/zip/ghost-0.5.2.zip
+% unzip ghost-0.5.2.zip
+% npm install --production
+% npm start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;sqlite3のエラーが出る場合は後述。&lt;/p&gt;
+
+&lt;h3 id="ghost"&gt;Ghostにログイン&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;http://localhost:2368/ghost&lt;/code&gt; でアカウント設定を行い、管理画面へログインできる。&lt;/p&gt;
+
+&lt;h3 id="githubpages"&gt;GitHubPagesにレポジトリの作成&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;GiHubにアクセス  &lt;/li&gt;
+&lt;li&gt;+new repository  &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;username/username.github.io&lt;/code&gt;のレポジトリを作成&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id="ghostclone"&gt;Ghostのディレクトリに作成したレポジトリをcloneする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git ./static
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="buster"&gt;Busterのインストール&lt;/h3&gt;
+
+&lt;p&gt;Ghostを静的ページとしてstaticディレクトリ以下に吐き出すためのツールとしてbusterをインストールする。&lt;/p&gt;
+
+&lt;p&gt;npm startはそのままにしておきたいので、ターミナルで新しいタブを開いて作業を行う。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% brew install python
+% sudo pip install buster
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="buster"&gt;Busterのデプロイ先を設定&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% buster setup --gh-repo=git@github.com:username/username.github.io.git --dir=static
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="ghostbuster"&gt;Ghost Buster !!&lt;/h3&gt;
+
+&lt;p&gt;Ghostの内容をstatic以下にBusterする。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;buster deploy&lt;/code&gt;コマンドで指定したデプロイ先にpushするまでを行ってくれる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% pwd /Users/username/ghost
+% buster generate --domain=http://localhost:2368
+% buster preview  #browse http://localhost:9000
+% buster deploy
+Good job! Deployed to Github Pages.  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="https://satoshin2071.github.io/"&gt;生成されたページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;運用方法&lt;/h2&gt;
+
+&lt;h3 id="staticbitbucket"&gt;staticディレクトリは以外はbitbucketで管理する&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% rm -rf static
+% git init
+% git remote add origin bitbucketの管理用リポジトリ
+% git add -A
+% git commit -m 'add'
+% git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="staticsubmodule"&gt;staticディレクトリをsubmoduleとして管理する&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;% pwd /Users/username/ghost
+% git clone git@github.com:username/username.github.io.git static
+% cd static
+% git submodule init
+% git submodule update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;新規記事投稿&lt;/h3&gt;
+
+&lt;p&gt;ここまで設定すればあとは以下の手順で記事作成公開できる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% npm start
+管理画面 http://localhost:2368/ghost へアクセスして記事投稿
+
+% buster generate --domain=http://localhost:2368
+% buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="sqlite3"&gt;sqlite3まわりでエラーが出る場合&lt;/h2&gt;
+
+&lt;p&gt;npm start時に以下のエラーが出てsqlite3のモジュールが見つからないよと言われる場合。再インストールすると上手くいきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://support.ghost.org/troubleshooting/"&gt;Ghost Troubleshooting Guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR: Cannot find module '/Users/satoshin2071/ghost/node_modules/sqlite3/lib/binding/node-v14-darwin-x64/node_sqlite3.node'
+
+
+% cd node_modules
+% rm -rf ./sqlite3
+% npm install sqlite3 --build-from-source
+もしくは
+% npm install https://github.com/mapbox/node-sqlite3/tarball/master
+% npm cache clean
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="node"&gt;nodeのヴァージョンが違うとき&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Migrations: Up to date at version 003
+
+ERROR: Unsupported version of Node  
+Ghost needs Node version ~0.10.0 you are using version 0.12.2  
+Please go to http://nodejs.org to get a supported version  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Package.jsonを修正します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% vim package.json
+
+"engines": {  
+        "node": "~0.10.0"
+    },
+
+↓
+
+"engines": {  
+        "node": "~0.12.2"
+    },
+
+% npm start
+
+&amp;gt; ghost@0.5.2 start /Users/satoshin2071/ghost
+&amp;gt; node index
+
+Migrations: Up to date at version 003  
+Ghost is running in development...  
+Listening on 127.0.0.1:2368  
+Url configured as: http://localhost:2368  
+Ctrl+C to shut down
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;いけました。&lt;/p&gt;
+
+&lt;h2 id=""&gt;問題点&lt;/h2&gt;
+
+&lt;p&gt;GithubPagesでは外部CSS等を利用できないのでghostのテーマで設定しているフォントが使えない (´・ω・`)&lt;/p&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="https://stefanscherer.github.io/setup-ghost-for-github-pages/"&gt;Setup Ghost for GitHub Pages&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://xavierriley.co.uk/blogging-with-ghost-buster-and-github-pages/index.html"&gt;(RE)STARTING A BLOG WITH GHOST&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://qiita.com/sotarok/items/0d525e568a6088f6f6bb"&gt;Git Submoduleの基礎&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://blog.paulbird.co/running-ghost-in-node-0-12-0/"&gt;Running and Installing Ghost on Node 0.12.0&lt;/a&gt;&lt;/p&gt;</description><link>http://localhost:2368/ghostwobusterdegithubpagesnihosuteingusuru/</link><guid isPermaLink="false">cb25782c-d759-491b-9263-df0ac27aec01</guid><dc:creator>satoshin</dc:creator><pubDate>Thu, 14 Jan 2016 14:09:49 GMT</pubDate></item></channel></rss>
