@@ -1,4 +1,71 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 02 Apr 2016 15:06:14 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;渋谷パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 10 Apr 2016 08:43:09 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>iOSプロジェクトをライブラリとして出す。 (手順とPR先について)</title><description>&lt;h2 id=""&gt;フロー&lt;/h2&gt;
+
+&lt;p&gt;ざっくりと以下の手順で行ってみました。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;主要の機能ができるまで開発は別のレポジトリで作成する &lt;br&gt;
+&lt;ol&gt;&lt;li&gt;bitbucketなりGithubなり&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;テストは主要機能を中心に薄く広く書く  &lt;/li&gt;
+&lt;li&gt;大体出来たら cocoaPods登録&amp;amp;リリース用のレポジトリを&lt;code&gt;pod lib create ライブラリ名&lt;/code&gt; で作成 &lt;br&gt;
+&lt;ol&gt;&lt;li&gt;リリース用レポジトリで開発をすすめる場合に開発ブランチからmasterへマージする際はコミットログを整理する &lt;a href="http://d.hatena.ne.jp/hnw/20110528"&gt;参考記事&lt;/a&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;リリース用のレポジトリとしてGithubへpush  &lt;/li&gt;
+&lt;li&gt;traivsで設定, build=&gt;pass の状態にする  &lt;/li&gt;
+&lt;li&gt;READMEの整理  &lt;/li&gt;
+&lt;li&gt;ローカルで動作確認,バリデーションを行いCocoaPodsで公開  &lt;/li&gt;
+&lt;li&gt;PR !!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id="cocoapods"&gt;Cocoapods&lt;/h3&gt;
+
+&lt;p&gt;プロジェクト作成から登録までは以下の記事が非常に参考になりました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2#_reference-6b7949cc23bec8ab93a4"&gt;【Swift】CocoaPodsに自作ライブラリを登録&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2#_reference-6b7949cc23bec8ab93a4"&gt;iOS向けのライブラリをCocoaPodsで配布する&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="travis"&gt;travis設定メモ&lt;/h3&gt;
+
+&lt;p&gt;jenkinsを業務で触っていたので travis の簡潔さは素晴らしいですね！！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://travis-ci.org/"&gt;https://travis-ci.org/&lt;/a&gt; へアクセスして&lt;code&gt;sign in with Github&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;左メニューの &lt;code&gt;My Repositories&lt;/code&gt; の + ボタンをクリック
+&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-03-33.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;公開したいレポジトリのスイッチをonにする
+&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-03-50.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;前の画面に戻るとレポジトリが増えているので選択&lt;/p&gt;
+
+&lt;p&gt;右の方にある &lt;code&gt;More options&lt;/code&gt;をクリックして&lt;code&gt;Build only if .travis.yml is present&lt;/code&gt;をonに、travis.ymlが無いとCIが走らないように設定する
+&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-04-06.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;これでレポジトリにpushするたびCIが走る&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;travis.ymlの設定する際のコツ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;masterのコミットログをtravis.yml設定のための悪戦苦闘で埋めないために別ブランチで作業し、完了したら&lt;code&gt;git merge --squash&lt;/code&gt;でmasterへマージする&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-11-43.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id="pr"&gt;PR先&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.cocoacontrols.com/"&gt;Cocoa Controls&lt;/a&gt;に登録
+&lt;ul&gt;&lt;li&gt;審査は順番&lt;/li&gt;
+&lt;li&gt;今何番目かはログインして右上メニューの&lt;code&gt;submited control&lt;/code&gt;の&lt;code&gt;Queue position&lt;/code&gt;で確認できる&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.ioscookies.com/"&gt;iOS Cookies&lt;/a&gt; に submitする&lt;/li&gt;
+&lt;li&gt;twitterのハッシュタグ「#iosdev」等&lt;/li&gt;
+&lt;li&gt;qiitaに関連記事をまとめる その中で使ったコアな技術解説をベースに&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/matteocrippa/awesome-swift/blob/master/.github/CONTRIBUTING.md"&gt;awesome-swiftの基準&lt;/a&gt;を満たすことを目指す。満たせたらプルリクしましょう！！&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://niwatako.hatenablog.jp/entry/2016/03/03/160212"&gt;try! Swift ライブラリの開発 #tryswiftconf Day2-8&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/iospuroziekutoworaiburaritositechu-su-shou-shun-toprxian-nituite/</link><guid isPermaLink="false">8eda5ca0-98da-4339-ac94-8b4ef8e8386c</guid><category>iOS</category><category>Cocoapods </category><category>travis</category><dc:creator>satoshin</dc:creator><pubDate>Sun, 10 Apr 2016 08:37:23 GMT</pubDate></item><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;渋谷パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4736-2.JPG" alt=""&gt;&lt;/p&gt;
 
@@ -18,7 +85,7 @@
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4729-1.JPG" alt=""&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/the-tomato-project-25th-anniversary-exhibition-o/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/tomato-exhibition/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。&lt;/p&gt;
 
