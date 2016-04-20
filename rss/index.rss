@@ -1,4 +1,46 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 10 Apr 2016 08:43:09 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>iOSプロジェクトをライブラリとして出す。 (手順とPR先について)</title><description>&lt;h2 id=""&gt;フロー&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Wed, 20 Apr 2016 13:52:43 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>CharlesでレスポンスのステータスコードをRewriteする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;エラー処理の実装する際などにCharlesで手っ取り早くレスポンスのステータスコードを変更するTips&lt;/p&gt;
+
+&lt;h2 id="charles"&gt;Charlesの導入&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://qiita.com/usagimaru/items/d340e87da98e62f99b60"&gt;usagimaru氏 のこの記事&lt;/a&gt;みればok&lt;/p&gt;
+
+&lt;h2 id=""&gt;手順&lt;/h2&gt;
+
+&lt;p&gt;今回はiOSアプリのAPIをシュミレータで起動して書き換える。&lt;/p&gt;
+
+&lt;p&gt;Charles起動&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;アプリをシュミレータで起動&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;Charlesで書き換えるAPIのURLを確認&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;Tools -&gt; Rewrite&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;Enable Rewrite の チェックボックスにチェックして左下のAddで設定追加する&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/a387accc-00eb-11e6-97cf-9f84dfa4707c.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;Locationsの設定 確認したAPIのURLで Protocol と hostを設定&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/ec1fc1c4-0724-11e6-842e-021fd58d6a13.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;Rulesの設定 今回はエラー処理の実装なので-1の入ってる箇所を404だったりに書き換えて確認に利用していく&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-20-22-46-28.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;sinatraでいちいち確認用のAPI立てるのでなく、サクッと書き換えるならCharlesを利用しよう。&lt;/p&gt;</description><link>http://localhost:2368/charlesderesuponsunosutetasukodoworewritesuru/</link><guid isPermaLink="false">60e29989-43a4-44c6-af9c-0d090800b05f</guid><category>Charles</category><dc:creator>satoshin</dc:creator><pubDate>Wed, 20 Apr 2016 13:52:00 GMT</pubDate></item><item><title>iOSプロジェクトをライブラリとして出す。 (手順とPR先について)</title><description>&lt;h2 id=""&gt;フロー&lt;/h2&gt;
 
 &lt;p&gt;ざっくりと以下の手順で行ってみました。&lt;/p&gt;
 
