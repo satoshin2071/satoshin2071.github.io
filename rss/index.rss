@@ -1,10 +1,10 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 24 Apr 2016 10:16:38 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>CharlesでレスポンスのステータスコードをRewriteする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SatoshiN Blog</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 24 Apr 2016 14:10:51 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>CharlesでレスポンスのステータスコードをRewriteする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;エラー処理の実装する際などにCharlesで手っ取り早くレスポンスのステータスコードを変更するTips&lt;/p&gt;
 
 &lt;h2 id="charles"&gt;Charlesの導入&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href="http://qiita.com/usagimaru/items/d340e87da98e62f99b60"&gt;usagimaru氏 のこの記事&lt;/a&gt;みればok&lt;/p&gt;
+&lt;p&gt;usagimaru氏 のこの記事みればok&lt;/p&gt;
 
 &lt;h2 id=""&gt;手順&lt;/h2&gt;
 
@@ -28,88 +28,92 @@
 
 &lt;p&gt;Enable Rewrite の チェックボックスにチェックして左下のAddで設定追加する&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/a387accc-00eb-11e6-97cf-9f84dfa4707c.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/1-1.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;Locationsの設定 確認したAPIのURLで Protocol と hostを設定&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/ec1fc1c4-0724-11e6-842e-021fd58d6a13.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/2-1.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;Rulesの設定 今回はエラー処理の実装なので-1の入ってる箇所を404だったりに書き換えて確認に利用していく&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-20-22-46-28.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/3-1.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h2 id=""&gt;まとめ&lt;/h2&gt;
 
-&lt;p&gt;sinatraでいちいち確認用のAPI立てるのでなく、サクッと書き換えるならCharlesを利用しよう。&lt;/p&gt;</description><link>http://localhost:2368/charlesderesuponsunosutetasukodoworewritesuru/</link><guid isPermaLink="false">60e29989-43a4-44c6-af9c-0d090800b05f</guid><category>Charles</category><dc:creator>satoshin</dc:creator><pubDate>Wed, 20 Apr 2016 13:52:00 GMT</pubDate></item><item><title>iOSプロジェクトをライブラリとして出す。 (手順とPR先について)</title><description>&lt;h2 id=""&gt;フロー&lt;/h2&gt;
+&lt;p&gt;sinatraでいちいち確認用のAPI立てるのでなく、サクッと書き換えるならCharlesを利用しよう。&lt;/p&gt;</description><link>http://localhost:2368/charlesderesuponsunosutetasukodoworewritesuru/</link><guid isPermaLink="false">43d6169a-0f5a-423f-8850-d74d713e0e0c</guid><category>Charles</category><dc:creator>satoshin</dc:creator><pubDate>Wed, 20 Apr 2016 14:04:00 GMT</pubDate></item><item><title>iOSプロジェクトをライブラリとして出す手順とPR方法</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
-&lt;p&gt;ざっくりと以下の手順で行ってみました。&lt;/p&gt;
+&lt;p&gt;実験的に作ってみた稚作ライブラリ &lt;a href="https://github.com/satoshin2071/SwiftyVerticalScrollBar"&gt;SwiftyVerticalScrollBar&lt;/a&gt; をライブラリとしてリリースする際に行った事&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;主要の機能ができるまで開発は別のレポジトリで作成する &lt;br&gt;
-&lt;ol&gt;&lt;li&gt;bitbucketなりGithubなり&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;
-&lt;li&gt;テストは主要機能を中心に薄く広く書く  &lt;/li&gt;
-&lt;li&gt;大体出来たら cocoaPods登録&amp;amp;リリース用のレポジトリを&lt;code&gt;pod lib create ライブラリ名&lt;/code&gt; で作成 &lt;br&gt;
-&lt;ol&gt;&lt;li&gt;リリース用レポジトリで開発をすすめる場合に開発ブランチからmasterへマージする際はコミットログを整理する &lt;a href="http://d.hatena.ne.jp/hnw/20110528"&gt;参考記事&lt;/a&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;
-&lt;li&gt;リリース用のレポジトリとしてGithubへpush  &lt;/li&gt;
-&lt;li&gt;traivsで設定, build=&gt;pass の状態にする  &lt;/li&gt;
-&lt;li&gt;READMEの整理  &lt;/li&gt;
-&lt;li&gt;ローカルで動作確認,バリデーションを行いCocoaPodsで公開  &lt;/li&gt;
-&lt;li&gt;PR !!&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id="cocoapods"&gt;Cocoapods&lt;/h3&gt;
-
-&lt;p&gt;プロジェクト作成から登録までは以下の記事が非常に参考になりました。&lt;/p&gt;
+&lt;h2 id=""&gt;開発&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2#_reference-6b7949cc23bec8ab93a4"&gt;【Swift】CocoaPodsに自作ライブラリを登録&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2#_reference-6b7949cc23bec8ab93a4"&gt;iOS向けのライブラリをCocoaPodsで配布する&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;はじめからリリース用のレポジトリの中で実装を行っていく事も考えられますが、主要の機能ができるまで開発は別のレポジトリで作成しました。&lt;/li&gt;
+&lt;li&gt;テストは主要機能を中心に薄く広く書くべきですが、今回はUI系かつUIControlのサブクラスという非常にUIテストがしづらいのでパスしました。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id="travis"&gt;travis設定メモ&lt;/h3&gt;
+&lt;h3 id="cocoapods"&gt;CocoaPods登録準備&lt;/h3&gt;
 
-&lt;p&gt;jenkinsを業務で触っていたので travis の簡潔さは素晴らしいですね！！&lt;/p&gt;
+&lt;p&gt;下記２つの記事を参考にCocoaPods登録の準備をしました。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://travis-ci.org/"&gt;https://travis-ci.org/&lt;/a&gt; へアクセスして&lt;code&gt;sign in with Github&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2"&gt;【Swift】CocoaPodsに自作ライブラリを登録&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2#_reference-6b7949cc23bec8ab93a4"&gt;iOS向けのライブラリをCocoaPodsで配布する&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pod lib create ライブラリ名&lt;/code&gt; でリリース用プロジェクト作成 &lt;/li&gt;
+&lt;li&gt;コミットログはなるべく汚さないようにリリース用のレポジトリとしてGithubへpush&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;左メニューの &lt;code&gt;My Repositories&lt;/code&gt; の + ボタンをクリック
-&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-03-33.png" alt=""&gt;&lt;/p&gt;
+&lt;h2 id="travis"&gt;travis設定&lt;/h2&gt;
 
-&lt;p&gt;公開したいレポジトリのスイッチをonにする
-&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-03-50.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;traivsで設定, build=&gt;pass の状態にします。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://travis-ci.org/"&gt;https://travis-ci.org/&lt;/a&gt; へアクセスしてsign in with Github&lt;/p&gt;
+
+&lt;p&gt;左メニューの My Repositories の + ボタンをクリック &lt;/p&gt;
+
+&lt;p&gt;公開したいレポジトリのスイッチをonにする &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/1.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;前の画面に戻るとレポジトリが増えているので選択&lt;/p&gt;
 
-&lt;p&gt;右の方にある &lt;code&gt;More options&lt;/code&gt;をクリックして&lt;code&gt;Build only if .travis.yml is present&lt;/code&gt;をonに、travis.ymlが無いとCIが走らないように設定する
-&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-04-06.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;右の方にある &lt;code&gt;More options&lt;/code&gt;をクリックして&lt;code&gt;Build only if .travis.yml is present&lt;/code&gt;を&lt;code&gt;on&lt;/code&gt;に、&lt;code&gt;travis.yml&lt;/code&gt;が無いとCIが走らないように設定する &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/2.png" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;これでレポジトリにpushするたびCIが走る&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;travis.ymlの設定する際のコツ&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;masterのコミットログをtravis.yml設定のための悪戦苦闘で埋めないために別ブランチで作業し、完了したら&lt;code&gt;git merge --squash&lt;/code&gt;でmasterへマージする&lt;/p&gt;
+&lt;p&gt;masterのコミットログをtravis.yml設定のための悪戦苦闘で埋めないために別ブランチで作業し、完了したら&lt;code&gt;git merge --squash&lt;/code&gt;でmasterへマージする。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/----------2016-04-10-17-11-43.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/3.png" alt=""&gt;&lt;/p&gt;
 
-&lt;h2 id="pr"&gt;PR先&lt;/h2&gt;
+&lt;h3 id="cocoapod"&gt;CocoaPodで公開&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;traivsは build=&gt;pass の状態なっているのでREADMEのバッジを確認を行う。&lt;/li&gt;
+&lt;li&gt;もろもろREADMEの整理&lt;/li&gt;
+&lt;li&gt;ローカルで動作確認 ※Swift だと Publicつけないと動かなかったりする &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pod spec lint Hoge.podspec&lt;/code&gt;コマンドでpodspecのバリデーション&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pod trunk push Hoge.podspec&lt;/code&gt; CocoaPodsへ公開&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="pr"&gt;PR先&lt;/h3&gt;
+
+&lt;p&gt;今回はCocoa Controlsでの登録を行ってみたくらいしか実行しておりませんが、以下のような方法が考えられるます。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://www.cocoacontrols.com/"&gt;Cocoa Controls&lt;/a&gt;に登録
 &lt;ul&gt;&lt;li&gt;審査は順番&lt;/li&gt;
-&lt;li&gt;今何番目かはログインして右上メニューの&lt;code&gt;submited control&lt;/code&gt;の&lt;code&gt;Queue position&lt;/code&gt;で確認できる&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;今何番目かはログインして右上メニューのsubmited controlのQueue positionで確認できる&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.ioscookies.com/"&gt;iOS Cookies&lt;/a&gt; に submitする&lt;/li&gt;
-&lt;li&gt;twitterのハッシュタグ「#iosdev」等&lt;/li&gt;
-&lt;li&gt;qiitaに関連記事をまとめる その中で使ったコアな技術解説をベースに&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/matteocrippa/awesome-swift/blob/master/.github/CONTRIBUTING.md"&gt;awesome-swiftの基準&lt;/a&gt;を満たすことを目指す。満たせたらプルリクしましょう！！&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;twitterのハッシュタグ「#iosdev」等 でつぶやく&lt;/li&gt;
+&lt;li&gt;その中で使ったコアな技術解説をベースにqiitaに関連記事をまとめる &lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/matteocrippa/awesome-swift"&gt;awesome-swift&lt;/a&gt;の基準を満たすことを目指す。&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://iosstack-friends.slack.com/messages/general/"&gt;iOS関連のslack&lt;/a&gt;に投げてみる&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/</link><guid isPermaLink="false">0a13a6ff-6eb0-4b20-ab7e-f0450b8021c3</guid><category>iOS</category><category>Travis</category><category>Cocoapods</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 11 Apr 2016 14:04:00 GMT</pubDate></item><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;渋谷パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
 
-&lt;h2 id=""&gt;参考&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="http://niwatako.hatenablog.jp/entry/2016/03/03/160212"&gt;try! Swift ライブラリの開発 #tryswiftconf Day2-8&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description><link>http://localhost:2368/iospuroziekutoworaiburaritositechu-su-shou-shun-toprxian-nituite/</link><guid isPermaLink="false">8eda5ca0-98da-4339-ac94-8b4ef8e8386c</guid><category>iOS</category><category>Cocoapods </category><category>travis</category><dc:creator>satoshin</dc:creator><pubDate>Sun, 10 Apr 2016 08:37:23 GMT</pubDate></item><item><title>THE TOMATO PROJECT 25th ANNIVERSARY EXHIBITION "O"</title><description>&lt;p&gt;渋谷パルコで開催していたTOMATOの展覧会にいってきました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4736-2.JPG" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/1.JPG" alt=""&gt;&lt;/p&gt;
 
 &lt;p&gt;自分の世代だとトレインスポッティングだったりVHS使ったVJのイメージですが、最近はお洋服とかもつくってるのですね👀&lt;/p&gt;
 
@@ -119,15 +123,15 @@
 
 &lt;p&gt;とにもかくにもUnderworld熱が高まったのでサマソニ2016参戦しようと思います😃&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4715.JPG" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/2.JPG" alt=""&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4719-1.JPG" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/3.JPG" alt=""&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4722.JPG" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/4.JPG" alt=""&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4729-1.JPG" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/5.JPG" alt=""&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/IMG_4730-1.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/tomato-exhibition/</link><guid isPermaLink="false">be536894-7a70-487f-a5e2-fc173892c51c</guid><category>Art</category><category>Exhibition</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 14:45:37 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/6.JPG" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/the-tomato-project-25th-anniversary-exhibition-o/</link><guid isPermaLink="false">5c52d3f6-619a-4d59-84e8-b2ce99ae2fc5</guid><category>Art</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 02 Apr 2016 11:24:00 GMT</pubDate></item><item><title>MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
 &lt;p&gt;これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。&lt;/p&gt;
 

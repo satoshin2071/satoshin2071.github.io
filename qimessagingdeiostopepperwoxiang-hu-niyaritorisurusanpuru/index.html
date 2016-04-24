@@ -9,7 +9,7 @@
 			<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet" type="text/css">
 			<link href="https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=76c444370c">
+			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=37e0efc0d3">
 	    <meta name="HandheldFriendly" content="True">
 	    <meta name="MobileOptimized" content="320">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
 				<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 				<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 			<![endif]-->
-				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=76c444370c">
+				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=37e0efc0d3">
 	<meta property="og:title" content="QiMessagingでiOSとPepperを相互にやりとりするサンプル">
 	<meta property="og:type" content="article">
 	<meta property="og:description" content="概要 QiMessagingJavaScriptとWebViewJavascriptBridgeを利用しiOSからPepperに命令を送る &amp; Pepperで発火したイベントの通知をiOSで受け取る を実装したサンプルです。 iOS側のサンプルはObjCで実装を行っています。 JavaScriptでのpepperとやりとりする部分は先にAndroidで実装していたものを参考にさせて頂きました。感謝です。 注意点 Pepperと同じネットワークに接続している必要あり XcodeのATSの設定を無効にする必要あり 実機で検証しました。 Pepper側 今回Pepper側で実装するのはイベントを発火させるだけの処理です。 advancedボックスライブラリ &gt; Memory &gt; Raise Eventボックスを配置し、適当な変数名「PepperQiMessaging/test」を設定します。この変数名に紐づくPepperのメモリイベントをiOS側のJavaScriptで監視することによってイベントを受け取ることが可能になります。 iOS側 WebViewでJavaScriptが記述してあるHTMLファイルを読み込んでやりとりを行います。細かい手順は以下です。 QiMessaging JavaScriptライブラリを読み込んであるHTMLファイルをUIWebViewで開く   WebViewJavascriptBridgeを利用してObjCとjavascriptをbridgeさせる   JavaScriptの命令を実行することでPepperのNAOqiのAPIに対して操作コマンドを送る、またはpepperのイベントを受け取ってObjCの処理を呼び出す ExampleApp.html 読み込んでいるjsライブラリ &lt;script type=" text src="jquery.min.js">
@@ -345,7 +345,7 @@ log('イベントコールバック登録')
 	  </ul>	
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="../assets/js/rrssb.min.js?v=76c444370c"></script>
+	<script src="../assets/js/rrssb.min.js?v=37e0efc0d3"></script>
   <!--
   <div id="comments">
   	<div id="disqus_thread"></div>
@@ -367,7 +367,7 @@ log('イベントコールバック登録')
 		<footer id="footer">
 			<section id="footer-message">© 2016 SatoshiN Blog. All rights reserved. Powered by <a href="http://ghost.org" target="_blank">Ghost</a>. <a href="https://github.com/kathyqian/crisp-ghost-theme" target="_blank">Crisp</a> theme by <a href="http://kathyqian.com" target="_blank">Kathy Qian</a>.</section>
 		</footer>
-	<script src="../public/jquery.js?v=76c444370c"></script>
+	<script src="../public/jquery.js?v=37e0efc0d3"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	</body>
