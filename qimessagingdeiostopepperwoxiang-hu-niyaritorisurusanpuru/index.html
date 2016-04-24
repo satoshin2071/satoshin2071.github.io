@@ -24,13 +24,13 @@
 	<meta property="og:description" content="概要 QiMessagingJavaScriptとWebViewJavascriptBridgeを利用しiOSからPepperに命令を送る &amp; Pepperで発火したイベントの通知をiOSで受け取る を実装したサンプルです。 iOS側のサンプルはObjCで実装を行っています。 JavaScriptでのpepperとやりとりする部分は先にAndroidで実装していたものを参考にさせて頂きました。感謝です。 注意点 Pepperと同じネットワークに接続している必要あり XcodeのATSの設定を無効にする必要あり 実機で検証しました。 Pepper側 今回Pepper側で実装するのはイベントを発火させるだけの処理です。 advancedボックスライブラリ &gt; Memory &gt; Raise Eventボックスを配置し、適当な変数名「PepperQiMessaging/test」を設定します。この変数名に紐づくPepperのメモリイベントをiOS側のJavaScriptで監視することによってイベントを受け取ることが可能になります。 iOS側 WebViewでJavaScriptが記述してあるHTMLファイルを読み込んでやりとりを行います。細かい手順は以下です。 QiMessaging JavaScriptライブラリを読み込んであるHTMLファイルをUIWebViewで開く   WebViewJavascriptBridgeを利用してObjCとjavascriptをbridgeさせる   JavaScriptの命令を実行することでPepperのNAOqiのAPIに対して操作コマンドを送る、またはpepperのイベントを受け取ってObjCの処理を呼び出す ExampleApp.html 読み込んでいるjsライブラリ &lt;script type=" text src="jquery.min.js">
 
 	    <meta name="generator" content="Ghost 0.5">
-<link rel="alternate" type="application/rss+xml" title="SatoshiN Blog" href="../rss/index.html">
+<link rel="alternate" type="application/rss+xml" title="SATOSHIN .NET" href="../rss/index.html">
 <link rel="canonical" href="index.html">
 	</head>
 	<body class="post-template tag-ios tag-pepper tag-objc">
 		<header id="header">
 			
-			<h1><a href="../">SatoshiN Blog</a></h1>
+			<h1><a href="../">SATOSHIN .NET</a></h1>
 			<p>woohooo!!</p>
 			<p><a href="http://satoshin303.tumblr.com">tumblr</a></p>
 			<p><a href="http://twitter.com/satoshin2071">twitter</a></p>
@@ -365,7 +365,7 @@ log('イベントコールバック登録')
 
 		</main>
 		<footer id="footer">
-			<section id="footer-message">© 2016 SatoshiN Blog. All rights reserved. Powered by <a href="http://ghost.org" target="_blank">Ghost</a>. <a href="https://github.com/kathyqian/crisp-ghost-theme" target="_blank">Crisp</a> theme by <a href="http://kathyqian.com" target="_blank">Kathy Qian</a>.</section>
+			<section id="footer-message">© 2016 SATOSHIN .NET. All rights reserved. Powered by <a href="http://ghost.org" target="_blank">Ghost</a>. <a href="https://github.com/kathyqian/crisp-ghost-theme" target="_blank">Crisp</a> theme by <a href="http://kathyqian.com" target="_blank">Kathy Qian</a>.</section>
 		</footer>
 	<script src="../public/jquery.js?v=37e0efc0d3"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
