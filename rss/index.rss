@@ -1,4 +1,62 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 25 Apr 2016 12:49:17 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>CharlesでレスポンスのステータスコードをRewriteする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 08 May 2016 10:09:20 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>読了 Unity5ゲーム開発レシピ ハマるゲーム制作のノウハウ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;Unityに慣れるため、2016年のゴールデンウィークは「Unity5ゲーム開発レシピ ハマるゲーム制作のノウハウ」という本に集中して取り組んでみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.amazon.co.jp/gp/product/B01AN97VHC?tag=udonudon-22"&gt;&lt;img src="http://images-jp.amazon.com/images/P/B01AN97VHC.09.MZZZZZZZ.jpg" alt="Amazon.co.jp： Unity5ゲーム開発レシピ ハマるゲーム制作のノウハウ eBook: BATA, まつだす: Kindleストア" title=""&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id="unity"&gt;そもそもなぜUnityを学ぶのか?&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;楽しさ半分、生き残り戦略半分&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;DMMシアターで観た&lt;code&gt;VRDG+H&lt;/code&gt;でのUnity Japan 高橋啓治郎氏のヴィジュアライゼーションを見てUnityでのVJ熱が高まった&lt;/li&gt;
+&lt;li&gt;Unity初心者なのに会社関係でUnite Tokyoには参加していたので興味があった&lt;/li&gt;
+&lt;li&gt;Hololensで遊びたい&lt;/li&gt;
+&lt;li&gt;所属している会社が&lt;a href="http://vr.up-frontier.jp/"&gt;VR関連のコンテンツに力を入れている&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;必ずしも予測なので見極めが必要だが&lt;a href="http://localhost:2368/(https://www.youtube.com/watch?v=imZ_4cO0P7Y)"&gt;VR/ARはマーケットから見ても成長が右肩上がりの市場&lt;/a&gt;なので、投資家としてもエンジニアとしてもこれはもう乗るしかない&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;本の内容と所感&lt;/h2&gt;
+
+&lt;p&gt;「Unity5ゲーム開発レシピ ハマるゲーム制作のノウハウ」という本は 以下の2部構成になっています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「PART1 =&gt; 3Dロボットアクションゲームの構築」&lt;/li&gt;
+&lt;li&gt;「PART2 =&gt; Unityちゃんを利用して3Dミニゲームの作成」&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;さらにざっくり内容をまとめると&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;3Dゲームに最低限必要な機能の実装と演出を含めた最適化&lt;/li&gt;
+&lt;li&gt;実際にスクリプトを書いてゲームオブジェクトにアタッチしていく,必要とあればprefabにしていく&lt;/li&gt;
+&lt;li&gt;すでに作成したスクリプトを再利用して機能を追加していく。&lt;/li&gt;
+&lt;li&gt;UIを作成してゲームとして必要な情報を表示する。&lt;/li&gt;
+&lt;li&gt;animatorを利用してモーションをつける&lt;/li&gt;
+&lt;li&gt;サウンド周りの調整&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ある程度の基礎は&lt;a href="http://dotinstall.com/lessons/basic_unity"&gt;ドットインストールのUnity入門 (全26回)&lt;/a&gt;で終えていたので、もう一歩踏み込みつつ網羅的に基礎を学びたい自分にはこの本はうってつけでした。&lt;/p&gt;
+
+&lt;h2 id=""&gt;深掘りしたいところ&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;CHAPTER 11 演出の強化&lt;/code&gt; で カメラまわりの処理を弄る項目があります。&lt;/p&gt;
+
+&lt;p&gt;例えば &lt;code&gt;敵の爆発時に画面を発光させる&lt;/code&gt; だったり &lt;code&gt;敵の爆発時に画面を揺らす&lt;/code&gt; 、 &lt;code&gt;バトル終了時にカメラを切り替える&lt;/code&gt; など。&lt;/p&gt;
+
+&lt;p&gt;カメラまわりの処理を深掘りして DMMシアターで観た&lt;code&gt;VRDG+H&lt;/code&gt;で観たような「カメラが3D空間内をグリングリン動きまわるヴィジュアライゼーション」のようなものが作れればなぁと実験中です。&lt;/p&gt;
+
+&lt;h2 id=""&gt;次のステップ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacなのでVSCodeでの開発環境を整える&lt;/li&gt;
+&lt;li&gt;BootCampでHololensに開発環境を整えられないか模索する&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blogs.unity3d.com/jp/2015/12/09/get-started-with-vr-sample-pack-learning-articles/"&gt;Unity公式VR学習チュートリアル&lt;/a&gt;に取り組む&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=7bPQ9L0hvXM&amp;amp;list=PL64OnOdZ_3NGD4qvRucx7BpKUZ-IqGc0Q"&gt;Unity Creative Coding&lt;/a&gt;に取り組む&lt;/li&gt;
+&lt;li&gt;「ゲームアプリの数学　Unityで学ぶ基礎からシェーダーまで」に取り組む&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href="http://www.amazon.co.jp/gp/product/B015IDHRH2?tag=udonudon-22"&gt;&lt;img src="http://images-jp.amazon.com/images/P/B015IDHRH2.09.MZZZZZZZ.jpg" alt="Amazon.co.jp： ゲームアプリの数学　Unityで学ぶ基礎からシェーダーまで eBook: 久富木 隆一: Kindleストア" title=""&gt;&lt;/a&gt;&lt;/p&gt;</description><link>http://localhost:2368/unity5gemukai-fa-resipi-hamarugemuzhi-zuo-nonouhau/</link><guid isPermaLink="false">2a0f6981-2f32-437b-9003-fae968889411</guid><category>Unity</category><dc:creator>satoshin</dc:creator><pubDate>Sun, 08 May 2016 10:00:54 GMT</pubDate></item><item><title>CharlesでレスポンスのステータスコードをRewriteする</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;エラー処理の実装する際などにCharlesで手っ取り早くレスポンスのステータスコードを変更するTips&lt;/p&gt;
 

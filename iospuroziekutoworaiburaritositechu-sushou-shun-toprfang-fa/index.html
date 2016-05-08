@@ -9,7 +9,7 @@
 			<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet" type="text/css">
 			<link href="https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=37e0efc0d3">
+			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=5af63fd7a0">
 	    <meta name="HandheldFriendly" content="True">
 	    <meta name="MobileOptimized" content="320">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
 				<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 				<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 			<![endif]-->
-				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=37e0efc0d3">
+				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=5af63fd7a0">
 	<meta property="og:title" content="iOSプロジェクトをライブラリとして出す手順とPR方法">
 	<meta property="og:type" content="article">
 	<meta property="og:description" content="概要 実験的に作ってみた稚作ライブラリ SwiftyVerticalScrollBar をライブラリとしてリリースする際に行った事 開発 はじめからリリース用のレポジトリの中で実装を行っていく事も考えられますが、主要の機能ができるまで開発は別のレポジトリで作成しました。 テストは主要機能を中心に薄く広く書くべきですが、今回はUI系かつUIControlのサブクラスという非常にUIテストがしづらいのでパスしました。 CocoaPods登録準備 下記２つの記事を参考にCocoaPods登録の準備をしました。 【Swift】CocoaPodsに自作ライブラリを登録 iOS向けのライブラリをCocoaPodsで配布する pod lib create ライブラリ名 でリリース用プロジェクト作成  コミットログはなるべく汚さないようにリリース用のレポジトリとしてGithubへpush travis設定 traivsで設定, build=&gt;pass の状態にします。 https://travis-ci.org/ へアクセスしてsign in with Github 左メニューの My Repositories の + ボタンをクリック  公開したいレポジトリのスイッチをonにする  前の画面に戻るとレポジトリが増えているので選択 右の方にある More optionsをクリックしてBuild only if .travis.yml is presentをonに、travis...">
@@ -238,7 +238,7 @@
 	  </ul>	
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="../assets/js/rrssb.min.js?v=37e0efc0d3"></script>
+	<script src="../assets/js/rrssb.min.js?v=5af63fd7a0"></script>
   <!--
   <div id="comments">
   	<div id="disqus_thread"></div>
@@ -260,7 +260,7 @@
 		<footer id="footer">
 			<section id="footer-message">© 2016 SATOSHIN .NET. All rights reserved. Powered by <a href="http://ghost.org" target="_blank">Ghost</a>. <a href="https://github.com/kathyqian/crisp-ghost-theme" target="_blank">Crisp</a> theme by <a href="http://kathyqian.com" target="_blank">Kathy Qian</a>.</section>
 		</footer>
-	<script src="../public/jquery.js?v=37e0efc0d3"></script>
+	<script src="../public/jquery.js?v=5af63fd7a0"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	</body>
