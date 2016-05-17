@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Mon, 16 May 2016 15:19:44 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Creative Coding with Unity 3D</title><description>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/----------2016-05-17-0-02-42.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 17 May 2016 13:41:10 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Creative Coding with Unity 3D</title><description>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/----------2016-05-17-0-02-42.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h2 id=""&gt;概要&lt;/h2&gt;
 
@@ -8,18 +8,21 @@
 
 &lt;h2 id=""&gt;所感&lt;/h2&gt;
 
-&lt;p&gt;UnityやUE4などコーディング以外にもGUIの使い方を学ぶ必要があるものは動画で学習するのも結構いい写経になるのだなと感じました。&lt;/p&gt;
+&lt;p&gt;コーディング以外にもGUIの使い方を学ぶ必要があるUnityは動画での学習が効率良かったです。&lt;/p&gt;
 
-&lt;p&gt;最終エピソードで動画主がオススメしていた数多くのUnityチュートリアルがある&lt;a href="http://catlikecoding.com/"&gt;catlikecoding&lt;/a&gt;も面白そう。&lt;/p&gt;
+&lt;p&gt;最終エピソードで動画主がオススメしていた数多くのUnityチュートリアルがある&lt;a href="http://catlikecoding.com/"&gt;catlikecoding.com&lt;/a&gt;も面白そうでした。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="http://unity-michi.com/post-534/"&gt;Unity の記事が載ってて色々と凄い海外サイト6選！&lt;/a&gt;によるとcatlikecodingはパトロン募って一つの記事を作り上げているのも興味深いです。&lt;/p&gt;
+&lt;p&gt;ちなみに&lt;a href="http://unity-michi.com/post-534/"&gt;Unity の記事が載ってて色々と凄い海外サイト6選！&lt;/a&gt;によるとcatlikecoding.comはパトロン募って一つの記事を作り上げているとのこと。&lt;/p&gt;
 
 &lt;h2 id="unity"&gt;動画でUnity学ぶ&lt;/h2&gt;
 
-&lt;p&gt;&lt;code&gt;twitch&lt;/code&gt;なんかは&lt;a href="http://plus.appgiga.jp/masatolan/2015/02/12/55346/"&gt;開発実況が流行っている&lt;/a&gt;という記事を過去に見ましたが、かなり活発な模様👀&lt;/p&gt;
+&lt;p&gt;動画で写経するのが効率よかったので他に無いか思ってた所、Youtubeの関連リンクに多くのUnityチュートリアルをアップしているチャンネルがありました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.youtube.com/channel/UC1fPX5QZ17kS3ndJiwU1c5A"&gt;Wicked Cat Studios (YouTube)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;twitch&lt;/code&gt;なんかは&lt;a href="http://plus.appgiga.jp/masatolan/2015/02/12/55346/"&gt;開発実況が流行っている&lt;/a&gt;という記事を過去に見ましたが、タグで検索したところかなり活発な模様👀&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://www.youtube.com/channel/UC1fPX5QZ17kS3ndJiwU1c5A"&gt;Wicked Cat Studios (YouTube)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://www.twitch.tv/directory/game/Creative/unity/videos"&gt;twitch のUnityタグ&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description><link>http://localhost:2368/creative-coding-with-unity-3d/</link><guid isPermaLink="false">55df7969-8631-40f2-97ae-d5c40cf85bd2</guid><category>Unity</category><dc:creator>satoshin</dc:creator><pubDate>Mon, 16 May 2016 15:19:02 GMT</pubDate></item><item><title>読了 Unity5ゲーム開発レシピ ハマるゲーム制作のノウハウ</title><description>&lt;h2 id=""&gt;はじめに&lt;/h2&gt;
 
@@ -468,23 +471,36 @@ func sessionRouteDidChange(){
 % brew install rbenv ruby-build
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;bash/zshrc にパス追加&lt;/p&gt;
+&lt;p&gt;bashrcもしくはzshrc にパス追加&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;[[ -d ~/.rbenv  ]] &amp;amp;&amp;amp; \
-  export PATH=${HOME}/.rbenv/bin:${PATH} &amp;amp;&amp;amp; \
-  eval "$(rbenv init -)"
+&lt;pre&gt;&lt;code&gt;vim zshrc
+
+export RBENV_ROOT="$HOME/.rbenv"
+
+if [ -d $RBENV_ROOT ]; then  
+ export PATH="$RBENV_ROOT/bin:$PATH"
+ eval "$(rbenv init -)"
+fi
+
+$ source ~/.zshrc
+$ rbenv rehash
+$ which ruby
+
+メモ　こっちでも可・
+$ echo 'eval "$(rbenv init -)"' &amp;gt;&amp;gt; ~/.zshrc
+$ source ~/.zshrc
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;利用したいrubyバージョンをインストール&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;% rbenv install -l #version確認
-% rbenb install 2.2.3
+% rbenv install 2.2.3
 ....
 
 % rbenv global 2.2.3 #環境全体をバージョンを統一(よしなに)
 
-% which ruby  #確認
-% ruby -w     #確認
+% which ruby  # rbenvが適用されていることを確認
+% ruby -w      # rbenvが適用されていることを確認
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id="mysql"&gt;mysql&lt;/h2&gt;
@@ -503,16 +519,21 @@ To relink: brew unlink mysql &amp;amp;&amp;amp; brew link mysql
 % brew link mysql
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;まだこの時点ではmysqlが起動してないので&lt;code&gt;mysql.server start&lt;/code&gt;を叩く必要がある。マシン起動のたびにstart叩きたくないので自動起動を設定する。&lt;/p&gt;
+&lt;p&gt;まだこの時点ではmysqlが起動してないので&lt;code&gt;mysql.server start&lt;/code&gt;を叩いて起動&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;% ln -fs /usr/local/opt/mysql/homebrew.mxcl.mysql.plist ~/Library/LaunchAgents/　#自動起動設定
+&lt;pre&gt;&lt;code&gt;% mysql.server start
+&lt;/code&gt;&lt;/pre&gt;
 
-% launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist #mysql起動
+&lt;p&gt;マシン起動のたびにstart叩きたくないので自動起動を設定する。LaunchAgentsで設定する方法もあるがbrewを利用すると簡単&lt;/p&gt;
 
-% ps ax | grep mysql #起動しているか確認
-  324   ??  S      0:00.05 /bin/sh /usr/local/opt/mysql/bin/mysqld_safe --bind-address=127.0.0.1 --datadir=/usr/local/var/mysql
-  615   ??  S      0:00.95 /usr/local/Cellar/mysql/5.6.27/bin/mysqld --basedir=/usr/local/Cellar/mysql/5.6.27 --datadir=/usr/local/var/mysql --plugin-dir=/usr/local/Cellar/mysql/5.6.27/lib/plugin --bind-address=127.0.0.1 --log-error=/usr/local/var/mysql/Mac-mini-PC93.local.err --pid-file=/usr/local/var/mysql/Mac-mini-PC93.local.pid
- 2123 s000  R+     0:00.00 grep mysql
+&lt;pre&gt;&lt;code&gt;自動起動設定
+% brew services start mysql
+
+自動起動停止
+% brew services stop mysql
+
+自動起動一覧取得
+% brew services list
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id="bundler"&gt;bundler&lt;/h2&gt;
@@ -538,7 +559,7 @@ To relink: brew unlink mysql &amp;amp;&amp;amp; brew link mysql
 &lt;pre&gt;&lt;code&gt;% mysql -u root
 
 mysql&amp;gt; create user 'username'@'localhost';  
-mysql&amp;gt; grant all on *.* to username
+mysql&amp;gt; grant all on *.* to 'username'@'localhost';
 
 exit
 &lt;/code&gt;&lt;/pre&gt;
@@ -568,7 +589,7 @@ rake db:migrate RAILS_ENV=development
 
 &lt;h2 id=""&gt;おわりに&lt;/h2&gt;
 
-&lt;p&gt;mysqlでユーザーつくるの面倒くさいので簡単な方法ないでしょうか&lt;/p&gt;</description><link>http://localhost:2368/rimotoniarurailspuroziekutowoluo-tositerokaruhuan-jing-dedong-kasumadenobei-wang-lu/</link><guid isPermaLink="false">abc2de40-86c0-4880-a59a-997f6e76af78</guid><category>Rails</category><category>MySql</category><dc:creator>satoshin</dc:creator><pubDate>Tue, 16 Feb 2016 13:58:46 GMT</pubDate></item><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+&lt;p&gt;mysqlでユーザーつくるの面倒くさいので簡単な方法ないでしょうか&lt;/p&gt;</description><link>http://localhost:2368/rimotoniarurailspuroziekutowoluo-tositerokaruhuan-jing-dedong-kasumadenobei-wang-lu/</link><guid isPermaLink="false">abc2de40-86c0-4880-a59a-997f6e76af78</guid><category>Rails</category><category>MySql</category><category>備忘録</category><dc:creator>satoshin</dc:creator><pubDate>Tue, 16 Feb 2016 13:58:46 GMT</pubDate></item><item><title>QiMessagingでiOSとPepperを相互にやりとりするサンプル</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href="http://doc.aldebaran.com/2-1/dev/js/index.html"&gt;QiMessagingJavaScript&lt;/a&gt;と&lt;a href="https://github.com/marcuswestin/WebViewJavascriptBridge"&gt;WebViewJavascriptBridge&lt;/a&gt;を利用し&lt;code&gt;iOSからPepperに命令を送る&lt;/code&gt; &amp;amp; &lt;code&gt;Pepperで発火したイベントの通知をiOSで受け取る&lt;/code&gt; を実装したサンプルです。&lt;/p&gt;
 
