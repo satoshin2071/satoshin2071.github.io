@@ -1,4 +1,149 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Tue, 17 May 2016 13:41:10 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Creative Coding with Unity 3D</title><description>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/----------2016-05-17-0-02-42.png" alt=""&gt;&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 19 May 2016 15:34:57 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;iOSアプリで複数の広告SDKをサーバー経由で表示の切り替えを行った際のメモ&lt;/p&gt;
+
+&lt;p&gt;対象はバナー広告、レクタングル広告&lt;/p&gt;
+
+&lt;h2 id=""&gt;やりたいこと&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;複数の広告プラットフォームを表示したい&lt;/li&gt;
+&lt;li&gt;管理画面から表示している広告プラットフォームを切り替えたい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;対象の広告プラットフォーム&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://fluct.jp/"&gt;Fluct&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.amoad.com/"&gt;AMoAd&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://ja.ad-stir.com/"&gt;adstir&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://adcrops.net/"&gt;Adcrops&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.scaleout.jp/ad-generation/"&gt;AdGeneration&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;バナー広告とレクタングル広告について&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;バナー広告 =&gt; サイズが&lt;code&gt;端末横幅 * 大体44?&lt;/code&gt; のよくあるモバイル向け広告&lt;/li&gt;
+&lt;li&gt;レクタングル広告 =&gt; その名の通り正方形サイズの広告。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;あまり馴染みのないレクタングル広告だったが各SDKともに呼び出し方法はバナー広告と同じで、表示サイズを変えてやればよいだけの実装が多かった&lt;/p&gt;
+
+&lt;p&gt;※インタースティシャル、ネイティブはまた別記事にて&lt;/p&gt;
+
+&lt;h2 id="api"&gt;サーバー側 広告APIの設計&lt;/h2&gt;
+
+&lt;p&gt;アプリ側で表示の切り分け・広告の切り分けを行なうためのAPI&lt;/p&gt;
+
+&lt;h3 id=""&gt;レスポンス&lt;/h3&gt;
+
+&lt;p&gt;レスポンス等の情報は以下リンク先を参照&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://docs.sample321.apiary.io/#reference/0/ads/ads"&gt;http://docs.sample321.apiary.io/#reference/0/ads/ads&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;※ &lt;a href="https://apiary.io/"&gt;apiary.io&lt;/a&gt;で実験的に作成&lt;/p&gt;
+
+&lt;h3 id="api"&gt;モックAPI&lt;/h3&gt;
+
+&lt;p&gt;以下のURLでAPIレスポンスの確認可能&lt;/p&gt;
+
+&lt;p&gt;レスポンスの ads は、&lt;code&gt;広告位置に対応するキー名&lt;/code&gt;と設定値のペアリスト(Object)とする&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://private-f6b85-sample321.apiary-mock.com/ads"&gt;http://private-f6b85-sample321.apiary-mock.com/ads&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;アプリ側設計&lt;/h2&gt;
+
+&lt;h3 id="model"&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;広告APIのレスポンスに対応するモデルクラス&lt;/p&gt;
+
+&lt;p&gt;どの広告SDKを指定しているか判定するインスタンスメソッドを持つ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;AdConfig
+
+@property (nonatomic, readonly) BOOL isVisible;
+@property (nonatomic, readonly, nonnull ) NSString* ssp;
+@property (nonatomic, readonly, nonnull) NSString* mediaID;
+
+- (BOOL)isSSPTypeFluct;
+- (BOOL)isSSPTypeAdstir;
+- (BOOL)isSSPTypeAmoad;
+- (BOOL)isSSPTypeAdcrops;
+- (BOOL)isSSPTypeAdgeneration;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="manager"&gt;Manager&lt;/h3&gt;
+
+&lt;p&gt;シングルトンのマネージャークラス&lt;/p&gt;
+
+&lt;p&gt;パースしたモデルを &lt;code&gt;[{広告位置のキー:ModelObject},{広告位置のキー:ModelObject}...]&lt;/code&gt;として保持(private)&lt;/p&gt;
+
+&lt;p&gt;広告位置キーを指定してキーが有効かどうかの確認、保持しているモデルクラスを供給するインスタンスメソッドを持つ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;AdConfigManager
+
+// インスタンス取得
++ (nonnull instancetype)defaultManager;
+
+// 初期化
+- (void)initializeWithJson:(nullable NSDictionary&amp;lt;NSString*,NSDictionary*&amp;gt;*)json;
+
+// キーを指定してAdConfigを取得
+- (nullable AdConfig*)configForKey:(nonnull NSString*)key;
+
+// キーを指定して表示有無の確認
+- (BOOL)isVisibleForAdKey:(nonnull NSString*)key;
+
+// 広告情報の再読み込みを行う必要があるかどうか
+- (BOOL)needReloadAds;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="view"&gt;View&lt;/h3&gt;
+
+&lt;p&gt;バナー広告、レクタングル広告を表示するためのViewクラス&lt;/p&gt;
+
+&lt;p&gt;コードもしくはnibから初期化を行うインスタンスメソッドを持つ&lt;/p&gt;
+
+&lt;p&gt;広告のサイズを返すクラスメソッドを持つ&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;configureWithConfig&lt;/code&gt;メソッドでは引数のAdConfig.ssp の中身を確認してどの広告プラットフォームかを判断。それぞれのSDKで実装されている広告描画処理を呼び出して表示を行う&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;AdView
+
+// 広告の設定を指定して、初期化
+- (instancetype __nullable)initWithFrame:(CGRect)frame config:(AdConfig* __nonnull)config;
+
+// 広告の設定を行う
+- (void)configureWithConfig:(AdConfig* __nonnull)config;
+
+// バナー広告のサイズ
++ (CGSize)sizeForMobileBannerAd;
+
+// レクタングル広告のサイズ
++ (CGSize)sizeForRectangleAd;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=""&gt;ユースケース&lt;/h3&gt;
+
+&lt;p&gt;ある画面の下部にバナー広告を表示するには以下の流れで実装する&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;起動時に広告情報取得APIを叩いてAdConfigManagerで保持
+↓
+ViewControllerのxibの表示したい箇所に AdViewのIBOutletを配置  
+↓
+viewDidLoadあたりでキーを指定してAdConfigManagerからAdConfigを取得  
+↓
+取得したAdConfigを OutletのAdView#configureWithConfigに渡して広告描画処理呼び出し
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=""&gt;まとめと所感&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;クラス設計とはいいつつ、バナー広告とレクタングル広告についてはシングルトンのマネージャークラスでデータを保持するだけ。&lt;/li&gt;
+&lt;li&gt;インタースティシャル、ネイティブ広告でこのマネージャークラス等を拡張しているのでそちらは後日まとめる。&lt;/li&gt;
+&lt;li&gt;広告SDKはまだまだSwift対応できているところが少ない。&lt;/li&gt;
+&lt;/ul&gt;</description><link>http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/</link><guid isPermaLink="false">cf54a9a8-7aeb-418c-8035-f49dfd0610d6</guid><category>iOS</category><category>objC</category><dc:creator>satoshin</dc:creator><pubDate>Thu, 19 May 2016 15:34:30 GMT</pubDate></item><item><title>Creative Coding with Unity 3D</title><description>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/----------2016-05-17-0-02-42.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h2 id=""&gt;概要&lt;/h2&gt;
 

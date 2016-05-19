@@ -9,7 +9,7 @@
 			<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet" type="text/css">
 			<link href="https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=56094a8b37">
+			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=5e822eae6b">
 	    <meta name="HandheldFriendly" content="True">
 	    <meta name="MobileOptimized" content="320">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
 				<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 				<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 			<![endif]-->
-				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=56094a8b37">
+				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=5e822eae6b">
 	<meta property="og:title" content="MPRemoteCommandCenterでオーディオファイル再生時のロック画面とコントロールセンターでの操作に対応する">
 	<meta property="og:type" content="article">
 	<meta property="og:description" content="はじめに これはサーバーからダウンロードした音声ファイルをバックグラウンドで再生するまでの設定を行った際の備忘録です。 iOS9.2のシュミレーターを利用していたのですが、コントロールセンターでボタンが表示されない等の現象が発生してましたので実機での検証を想定しています。 環境 Xcode7.2 iOS9系 実機 やったこと Background Audio&amp;AirPlayのチェックボックスをONに Targets名 =&gt; Capabilities =&gt; Background Modes =&gt; Audio&amp;AirPlay 音声ファイルのパーミッションの設定 今回はAVAudioPlayerを利用して楽曲再生を行いました。 ダウンロードしてストレージに保存した音声ファイルをそのままロック画面で再生しようとすると、パーミッションの関係でAVAudioPlayer play error and the error is Code=-54 エラーが発生します。 NSFileManager.defaultManager.setAttributesで保存先のパーミッションをNSFileProtectionNoneに変更し上記のエラーに対応しました。 NSFileManager Class Reference NSOSStatusErrorDomain Code=-54 for AVAudioPlayer     // 保存先ディレクトリパス取得     func exportDirectoryPath() -...">
@@ -341,7 +341,7 @@ func sessionRouteDidChange(){
 	  </ul>	
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="../assets/js/rrssb.min.js?v=56094a8b37"></script>
+	<script src="../assets/js/rrssb.min.js?v=5e822eae6b"></script>
   <!--
   <div id="comments">
   	<div id="disqus_thread"></div>
@@ -363,7 +363,7 @@ func sessionRouteDidChange(){
 		<footer id="footer">
 			<section id="footer-message">© 2016 SATOSHIN .NET. All rights reserved. Powered by <a href="http://ghost.org" target="_blank">Ghost</a>. <a href="https://github.com/kathyqian/crisp-ghost-theme" target="_blank">Crisp</a> theme by <a href="http://kathyqian.com" target="_blank">Kathy Qian</a>.</section>
 		</footer>
-	<script src="../public/jquery.js?v=56094a8b37"></script>
+	<script src="../public/jquery.js?v=5e822eae6b"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	</body>

@@ -2,7 +2,7 @@
 	<head>
 	    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	    <title>iOSプロジェクトをライブラリとして出す手順とPR方法</title>
+	    <title>iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)</title>
 	    <meta name="description" content="">
 	    <link rel="shortcut icon" href="index.html">
 	    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,700italic,300,700" rel="stylesheet" type="text/css">
@@ -19,15 +19,15 @@
 				<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 			<![endif]-->
 				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=5e822eae6b">
-	<meta property="og:title" content="iOSプロジェクトをライブラリとして出す手順とPR方法">
+	<meta property="og:title" content="iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)">
 	<meta property="og:type" content="article">
-	<meta property="og:description" content="概要 実験的に作ってみた稚作ライブラリ SwiftyVerticalScrollBar をライブラリとしてリリースする際に行った事 開発 はじめからリリース用のレポジトリの中で実装を行っていく事も考えられますが、主要の機能ができるまで開発は別のレポジトリで作成しました。 テストは主要機能を中心に薄く広く書くべきですが、今回はUI系かつUIControlのサブクラスという非常にUIテストがしづらいのでパスしました。 CocoaPods登録準備 下記２つの記事を参考にCocoaPods登録の準備をしました。 【Swift】CocoaPodsに自作ライブラリを登録 iOS向けのライブラリをCocoaPodsで配布する pod lib create ライブラリ名 でリリース用プロジェクト作成  コミットログはなるべく汚さないようにリリース用のレポジトリとしてGithubへpush travis設定 traivsで設定, build=&gt;pass の状態にします。 https://travis-ci.org/ へアクセスしてsign in with Github 左メニューの My Repositories の + ボタンをクリック  公開したいレポジトリのスイッチをonにする  前の画面に戻るとレポジトリが増えているので選択 右の方にある More optionsをクリックしてBuild only if .travis.yml is presentをonに、travis...">
+	<meta property="og:description" content="概要 iOSアプリで複数の広告SDKをサーバー経由で表示の切り替えを行った際のメモ 対象はバナー広告、レクタングル広告 やりたいこと 複数の広告プラットフォームを表示したい 管理画面から表示している広告プラットフォームを切り替えたい 対象の広告プラットフォーム Fluct AMoAd adstir Adcrops AdGeneration バナー広告とレクタングル広告について バナー広告 =&gt; サイズが端末横幅 * 大体44? のよくあるモバイル向け広告 レクタングル広告 =&gt; その名の通り正方形サイズの広告。 あまり馴染みのないレクタングル広告だったが各SDKともに呼び出し方法はバナー広告と同じで、表示サイズを変えてやればよいだけの実装が多かった ※インタースティシャル、ネイティブはまた別記事にて サーバー側 広告APIの設計 アプリ側で表示の切り分け・広告の切り分けを行なうためのAPI レスポンス レスポンス等の情報は以下リンク先を参照 http://docs.sample321.apiary.io/#reference/0/ads/ads ※ apiary.ioで実験的に作成 モックAPI 以下のURLでAPIレスポンスの確認可能 レスポンスの ads は、広告位置に対応するキー名と設定値のペアリスト(Object)とする http...">
 
 	    <meta name="generator" content="Ghost 0.5">
 <link rel="alternate" type="application/rss+xml" title="SATOSHIN .NET" href="../rss/index.html">
 <link rel="canonical" href="index.html">
 	</head>
-	<body class="post-template tag-ios tag-travis tag-cocoapods">
+	<body class="post-template tag-ios tag-objc">
 		<header id="header">
 			
 			<h1><a href="../">SATOSHIN .NET</a></h1>
@@ -54,85 +54,159 @@
 			
 		</header>
 		<main id="content">
-			<article id="12" class="post tag-ios tag-travis tag-cocoapods">
-	<div class="post-stamp">April 11, 2016<span class="taglist"> · <a href="../tag/ios/">iOS</a> <a href="../tag/travis/">Travis</a> <a href="../tag/cocoapods/">Cocoapods</a></span></div>
-	<h1 class="post-title">iOSプロジェクトをライブラリとして出す手順とPR方法</h1>
+			<article id="17" class="post tag-ios tag-objc">
+	<div class="post-stamp">May 20, 2016<span class="taglist"> · <a href="../tag/ios/">iOS</a> <a href="../tag/objc/">objC</a></span></div>
+	<h1 class="post-title">iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)</h1>
 	<h2 id="">概要</h2>
 
-<p>実験的に作ってみた稚作ライブラリ <a href="https://github.com/satoshin2071/SwiftyVerticalScrollBar">SwiftyVerticalScrollBar</a> をライブラリとしてリリースする際に行った事</p>
+<p>iOSアプリで複数の広告SDKをサーバー経由で表示の切り替えを行った際のメモ</p>
 
-<h2 id="">開発</h2>
+<p>対象はバナー広告、レクタングル広告</p>
+
+<h2 id="">やりたいこと</h2>
 
 <ul>
-<li>はじめからリリース用のレポジトリの中で実装を行っていく事も考えられますが、主要の機能ができるまで開発は別のレポジトリで作成しました。</li>
-<li>テストは主要機能を中心に薄く広く書くべきですが、今回はUI系かつUIControlのサブクラスという非常にUIテストがしづらいのでパスしました。</li>
+<li>複数の広告プラットフォームを表示したい</li>
+<li>管理画面から表示している広告プラットフォームを切り替えたい</li>
 </ul>
 
-<h3 id="cocoapods">CocoaPods登録準備</h3>
-
-<p>下記２つの記事を参考にCocoaPods登録の準備をしました。</p>
+<h2 id="">対象の広告プラットフォーム</h2>
 
 <ul>
-<li><a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2">【Swift】CocoaPodsに自作ライブラリを登録</a></li>
-<li><a href="http://qiita.com/taji-taji/items/e23373f9b8124de728a2#_reference-6b7949cc23bec8ab93a4">iOS向けのライブラリをCocoaPodsで配布する</a></li>
-<li><code>pod lib create ライブラリ名</code> でリリース用プロジェクト作成 </li>
-<li>コミットログはなるべく汚さないようにリリース用のレポジトリとしてGithubへpush</li>
+<li><a href="http://fluct.jp/">Fluct</a></li>
+<li><a href="http://www.amoad.com/">AMoAd</a></li>
+<li><a href="https://ja.ad-stir.com/">adstir</a></li>
+<li><a href="https://adcrops.net/">Adcrops</a></li>
+<li><a href="http://www.scaleout.jp/ad-generation/">AdGeneration</a></li>
 </ul>
 
-<h2 id="travis">travis設定</h2>
-
-<p>traivsで設定, build=&gt;pass の状態にします。</p>
-
-<p><a href="https://travis-ci.org/">https://travis-ci.org/</a> へアクセスしてsign in with Github</p>
-
-<p>左メニューの My Repositories の + ボタンをクリック </p>
-
-<p>公開したいレポジトリのスイッチをonにする </p>
-
-<p><img src="../content/images/2016/04/1.png" alt=""></p>
-
-<p>前の画面に戻るとレポジトリが増えているので選択</p>
-
-<p>右の方にある <code>More options</code>をクリックして<code>Build only if .travis.yml is present</code>を<code>on</code>に、<code>travis.yml</code>が無いとCIが走らないように設定する </p>
-
-<p><img src="../content/images/2016/04/2.png" alt=""></p>
-
-<p>これでレポジトリにpushするたびCIが走る</p>
-
-<p><strong>travis.ymlの設定する際のコツ</strong></p>
-
-<p>masterのコミットログをtravis.yml設定のための悪戦苦闘で埋めないために別ブランチで作業し、完了したら<code>git merge --squash</code>でmasterへマージする。</p>
-
-<p><img src="../content/images/2016/04/3.png" alt=""></p>
-
-<h3 id="cocoapod">CocoaPodで公開</h3>
+<h2 id="">バナー広告とレクタングル広告について</h2>
 
 <ul>
-<li>traivsは build=&gt;pass の状態なっているのでREADMEのバッジを確認を行う。</li>
-<li>もろもろREADMEの整理</li>
-<li>ローカルで動作確認 ※Swift だと Publicつけないと動かなかったりする </li>
-<li><code>pod spec lint Hoge.podspec</code>コマンドでpodspecのバリデーション</li>
-<li><code>pod trunk push Hoge.podspec</code> CocoaPodsへ公開</li>
+<li>バナー広告 =&gt; サイズが<code>端末横幅 * 大体44?</code> のよくあるモバイル向け広告</li>
+<li>レクタングル広告 =&gt; その名の通り正方形サイズの広告。</li>
 </ul>
 
-<h3 id="pr">PR先</h3>
+<p>あまり馴染みのないレクタングル広告だったが各SDKともに呼び出し方法はバナー広告と同じで、表示サイズを変えてやればよいだけの実装が多かった</p>
 
-<p>今回はCocoa Controlsでの登録しか実行しておりませんが、以下のような方法が考えられます</p>
+<p>※インタースティシャル、ネイティブはまた別記事にて</p>
+
+<h2 id="api">サーバー側 広告APIの設計</h2>
+
+<p>アプリ側で表示の切り分け・広告の切り分けを行なうためのAPI</p>
+
+<h3 id="">レスポンス</h3>
+
+<p>レスポンス等の情報は以下リンク先を参照</p>
+
+<p><a href="http://docs.sample321.apiary.io/#reference/0/ads/ads">http://docs.sample321.apiary.io/#reference/0/ads/ads</a></p>
+
+<p>※ <a href="https://apiary.io/">apiary.io</a>で実験的に作成</p>
+
+<h3 id="api">モックAPI</h3>
+
+<p>以下のURLでAPIレスポンスの確認可能</p>
+
+<p>レスポンスの ads は、<code>広告位置に対応するキー名</code>と設定値のペアリスト(Object)とする</p>
+
+<p><a href="http://private-f6b85-sample321.apiary-mock.com/ads">http://private-f6b85-sample321.apiary-mock.com/ads</a></p>
+
+<h2 id="">アプリ側設計</h2>
+
+<h3 id="model">Model</h3>
+
+<p>広告APIのレスポンスに対応するモデルクラス</p>
+
+<p>どの広告SDKを指定しているか判定するインスタンスメソッドを持つ</p>
+
+<pre><code>AdConfig
+
+@property (nonatomic, readonly) BOOL isVisible;
+@property (nonatomic, readonly, nonnull ) NSString* ssp;
+@property (nonatomic, readonly, nonnull) NSString* mediaID;
+
+- (BOOL)isSSPTypeFluct;
+- (BOOL)isSSPTypeAdstir;
+- (BOOL)isSSPTypeAmoad;
+- (BOOL)isSSPTypeAdcrops;
+- (BOOL)isSSPTypeAdgeneration;
+</code></pre>
+
+<h3 id="manager">Manager</h3>
+
+<p>シングルトンのマネージャークラス</p>
+
+<p>パースしたモデルを <code>[{広告位置のキー:ModelObject},{広告位置のキー:ModelObject}...]</code>として保持(private)</p>
+
+<p>広告位置キーを指定してキーが有効かどうかの確認、保持しているモデルクラスを供給するインスタンスメソッドを持つ</p>
+
+<pre><code>AdConfigManager
+
+// インスタンス取得
++ (nonnull instancetype)defaultManager;
+
+// 初期化
+- (void)initializeWithJson:(nullable NSDictionary&lt;NSString*,NSDictionary*&gt;*)json;
+
+// キーを指定してAdConfigを取得
+- (nullable AdConfig*)configForKey:(nonnull NSString*)key;
+
+// キーを指定して表示有無の確認
+- (BOOL)isVisibleForAdKey:(nonnull NSString*)key;
+
+// 広告情報の再読み込みを行う必要があるかどうか
+- (BOOL)needReloadAds;
+</code></pre>
+
+<h3 id="view">View</h3>
+
+<p>バナー広告、レクタングル広告を表示するためのViewクラス</p>
+
+<p>コードもしくはnibから初期化を行うインスタンスメソッドを持つ</p>
+
+<p>広告のサイズを返すクラスメソッドを持つ</p>
+
+<p><code>configureWithConfig</code>メソッドでは引数のAdConfig.ssp の中身を確認してどの広告プラットフォームかを判断。それぞれのSDKで実装されている広告描画処理を呼び出して表示を行う</p>
+
+<pre><code>AdView
+
+// 広告の設定を指定して、初期化
+- (instancetype __nullable)initWithFrame:(CGRect)frame config:(AdConfig* __nonnull)config;
+
+// 広告の設定を行う
+- (void)configureWithConfig:(AdConfig* __nonnull)config;
+
+// バナー広告のサイズ
++ (CGSize)sizeForMobileBannerAd;
+
+// レクタングル広告のサイズ
++ (CGSize)sizeForRectangleAd;
+</code></pre>
+
+<h3 id="">ユースケース</h3>
+
+<p>ある画面の下部にバナー広告を表示するには以下の流れで実装する</p>
+
+<pre><code>起動時に広告情報取得APIを叩いてAdConfigManagerで保持
+↓
+ViewControllerのxibの表示したい箇所に AdViewのIBOutletを配置  
+↓
+viewDidLoadあたりでキーを指定してAdConfigManagerからAdConfigを取得  
+↓
+取得したAdConfigを OutletのAdView#configureWithConfigに渡して広告描画処理呼び出し
+</code></pre>
+
+<h2 id="">まとめと所感</h2>
 
 <ul>
-<li><a href="https://www.cocoacontrols.com/">Cocoa Controls</a>に登録
-<ul><li>審査は順番</li>
-<li>今何番目かはログインして右上メニューのsubmited controlのQueue positionで確認できる</li></ul></li>
-<li><a href="http://www.ioscookies.com/">iOS Cookies</a> に submitする</li>
-<li>twitterのハッシュタグ「#iosdev」等 でつぶやく</li>
-<li>その中で使ったコアな技術解説をベースにqiitaに関連記事をまとめる </li>
-<li><a href="https://github.com/matteocrippa/awesome-swift">awesome-swift</a>の基準を満たすことを目指す。</li>
-<li><a href="https://iosstack-friends.slack.com/messages/general/">iOS関連のslack</a>に投げてみる</li>
+<li>クラス設計とはいいつつ、バナー広告とレクタングル広告についてはシングルトンのマネージャークラスでデータを保持するだけ。</li>
+<li>インタースティシャル、ネイティブ広告でこのマネージャークラス等を拡張しているのでそちらは後日まとめる。</li>
+<li>広告SDKはまだまだSwift対応できているところが少ない。</li>
 </ul>
 	<div id="social-bar">
 		<ul class="rrssb-buttons clearfix">
 	      <li class="email">
-	          <a href="mailto:?subject=iOS%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6%E5%87%BA%E3%81%99%E6%89%8B%E9%A0%86%E3%81%A8PR%E6%96%B9%E6%B3%95&amp;body=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/">
+	          <a href="mailto:?subject=iOS%E3%82%A2%E3%83%97%E3%83%AA%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8ASDK%E3%82%92%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%81%8B%E3%82%89%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B%E3%82%AF%E3%83%A9%E3%82%B9%E8%A8%AD%E8%A8%88(%E3%83%90%E3%83%8A%E3%83%BC%2C%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A)&amp;body=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/">
 	              <span class="icon">
 	                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 	                      <path transform="scale(0.014,-0.014) translate(0,-1670)" d="M1792 826v-794q0 -66 -47 -113t-113 -47h-1472q-66 0 -113 47t-47 113v794q44 -49 101 -87q362 -246 497 -345q57 -42 92.5 -65.5t94.5 -48t110 -24.5h1h1q51 0 110 24.5t94.5 48t92.5 65.5q170 123 498 345q57 39 100 87zM1792 1120q0 -79 -49 -151t-122 -123 q-376 -261 -468 -325q-10 -7 -42.5 -30.5t-54 -38t-52 -32.5t-57.5 -27t-50 -9h-1h-1q-23 0 -50 9t-57.5 27t-52 32.5t-54 38t-42.5 30.5q-91 64 -262 182.5t-205 142.5q-62 42 -117 115.5t-55 136.5q0 78 41.5 130t118.5 52h1472q65 0 112.5 -47t47.5 -113z"></path>
@@ -142,7 +216,7 @@
 	          </a>
 	      </li>
 	      <li class="facebook">
-	          <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/" class="popup">
+	          <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/" class="popup">
 	              <span class="icon">
 	                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 	                      <path d="M27.825,4.783c0-2.427-2.182-4.608-4.608-4.608H4.783c-2.422,0-4.608,2.182-4.608,4.608v18.434 c0,2.427,2.181,4.608,4.608,4.608H14V17.379h-3.379v-4.608H14v-1.795c0-3.089,2.335-5.885,5.192-5.885h3.718v4.608h-3.726 c-0.408,0-0.884,0.492-0.884,1.236v1.836h4.609v4.608h-4.609v10.446h4.916c2.422,0,4.608-2.188,4.608-4.608V4.783z"></path>
@@ -152,7 +226,7 @@
 	          </a>
 	      </li>
 				<li class="twitter">
-	          <a href="http://twitter.com/home?status=iOS%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6%E5%87%BA%E3%81%99%E6%89%8B%E9%A0%86%E3%81%A8PR%E6%96%B9%E6%B3%95%20http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/" class="popup">
+	          <a href="http://twitter.com/home?status=iOS%E3%82%A2%E3%83%97%E3%83%AA%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8ASDK%E3%82%92%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%81%8B%E3%82%89%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B%E3%82%AF%E3%83%A9%E3%82%B9%E8%A8%AD%E8%A8%88(%E3%83%90%E3%83%8A%E3%83%BC%2C%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A)%20http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/" class="popup">
 	              <span class="icon">
 	                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 			                  <path d="M24.253,8.756C24.689,17.08,18.297,24.182,9.97,24.62c-3.122,0.162-6.219-0.646-8.861-2.32 c2.703,0.179,5.376-0.648,7.508-2.321c-2.072-0.247-3.818-1.661-4.489-3.638c0.801,0.128,1.62,0.076,2.399-0.155 C4.045,15.72,2.215,13.6,2.115,11.077c0.688,0.275,1.426,0.407,2.168,0.386c-2.135-1.65-2.729-4.621-1.394-6.965 C5.575,7.816,9.54,9.84,13.803,10.071c-0.842-2.739,0.694-5.64,3.434-6.482c2.018-0.623,4.212,0.044,5.546,1.683 c1.186-0.213,2.318-0.662,3.329-1.317c-0.385,1.256-1.247,2.312-2.399,2.942c1.048-0.106,2.069-0.394,3.019-0.851 C26.275,7.229,25.39,8.196,24.253,8.756z"></path>
@@ -162,7 +236,7 @@
 	          </a>
 	      </li>
 				<li class="linkedin">
-	          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/&amp;title=iOS%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6%E5%87%BA%E3%81%99%E6%89%8B%E9%A0%86%E3%81%A8PR%E6%96%B9%E6%B3%95&amp;summary=%E6%A6%82%E8%A6%81%20%E5%AE%9F%E9%A8%93%E7%9A%84%E3%81%AB%E4%BD%9C%E3%81%A3%E3%81%A6%E3%81%BF%E3%81%9F%E7%A8%9A%E4%BD%9C%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%20SwiftyVerticalScrollBar%20%E3%82%92%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B%E9%9A%9B%E3%81%AB%E8%A1%8C%E3%81%A3%E3%81%9F%E4%BA%8B%20%E9%96%8B%E7%99%BA%20%E3%81%AF%E3%81%98%E3%82%81%E3%81%8B%E3%82%89%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%AE%E4%B8%AD%E3%81%A7%E5%AE%9F%E8%A3%85%E3%82%92%E8%A1%8C%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F%E4%BA%8B%E3%82%82%E8%80%83%E3%81%88%E3%82%89%E3%82%8C%E3%81%BE%E3%81%99%E3%81%8C%E3%80%81%E4%B8%BB%E8%A6%81%E3%81%AE%E6%A9%9F%E8%83%BD%E3%81%8C%E3%81%A7%E3%81%8D%E3%82%8B%E3%81%BE%E3%81%A7%E9%96%8B%E7%99%BA%E3%81%AF%E5%88%A5%E3%81%AE%E3%83%AC%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%A7%E4%BD%9C%E6%88%90%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%20%E3%83%86%E3%82%B9%E3%83%88%E3%81%AF%E4%B8%BB%E8%A6%81%E6%A9%9F%E8%83%BD%E3%82%92%E4%B8%AD%E5%BF%83%E3%81%AB%E8%96%84%E3%81%8F%E5%BA%83%E3%81%8F%E6%9B%B8%E3%81%8F%E3%81%B9%E3%81%8D%E3%81%A7%E3%81%99%E3%81%8C%E3%80%81%E4%BB%8A%E5%9B%9E%E3%81%AFUI%E7%B3%BB%E3%81%8B%E3%81%A4UIControl%E3%81%AE%E3%82%B5%E3%83%96%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%A8%E3%81%84%E3%81%86%E9%9D%9E%E5%B8%B8%E3%81%ABUI%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E3%81%97%E3%81%A5%E3%82%89%E3%81%84%E3%81%AE%E3%81%A7%E3%83%91%E3%82%B9%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%20CocoaPods%E7%99%BB%E9%8C%B2%E6%BA%96%E5%82%99%20%E4%B8%8B%E8%A8%98%EF%BC%92%E3%81%A4%E3%81%AE%E8%A8%98%E4%BA%8B%E3%82%92%E5%8F%82%E8%80%83%E3%81%ABCocoaPods%E7%99%BB%E9%8C%B2%E3%81%AE%E6%BA%96%E5%82%99%E3%82%92%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%20%E3%80%90Swift%E3%80%91CocoaPods%E3%81%AB%E8%87%AA%E4%BD%9C%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%82%92%E7%99%BB%E9%8C%B2%20iOS%E5%90%91%E3%81%91%E3%81%AE%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%82%92CocoaPods%E3%81%A7%E9%85%8D%E5%B8%83%E3%81%99%E3%82%8B%20pod%20lib%20create%20%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E5%90%8D%20%E3%81%A7%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E7%94%A8%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E4%BD%9C%E6%88%90%20%20%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%AD%E3%82%B0%E3%81%AF%E3%81%AA%E3%82%8B%E3%81%B9%E3%81%8F%E6%B1%9A%E3%81%95%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E7%94%A8%E3%81%AE%E3%83%AC%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6Github%E3%81%B8push%20travis%E8%A8%AD%E5%AE%9A%20traivs%E3%81%A7%E8%A8%AD%E5%AE%9A,%20build=&gt;pass%20%E3%81%AE%E7%8A%B6%E6%85%8B%E3%81%AB%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%20https://travis-ci.org/%20%E3%81%B8%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%A6sign%20in%20with%20Github%20%E5%B7%A6%E3%83%A1%E3%83%8B%E3%83%A5%E3%83%BC%E3%81%AE%20My%20Repositories%20%E3%81%AE%20+%20%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E3%82%AF%E3%83%AA%E3%83%83%E3%82%AF%20%20%E5%85%AC%E9%96%8B%E3%81%97%E3%81%9F%E3%81%84%E3%83%AC%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%AE%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81%E3%82%92on%E3%81%AB%E3%81%99%E3%82%8B%20%20%E5%89%8D%E3%81%AE%E7%94%BB%E9%9D%A2%E3%81%AB%E6%88%BB%E3%82%8B%E3%81%A8%E3%83%AC%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%8C%E5%A2%97%E3%81%88%E3%81%A6%E3%81%84%E3%82%8B%E3%81%AE%E3%81%A7%E9%81%B8%E6%8A%9E%20%E5%8F%B3%E3%81%AE%E6%96%B9%E3%81%AB%E3%81%82%E3%82%8B%20More%20options%E3%82%92%E3%82%AF%E3%83%AA%E3%83%83%E3%82%AF%E3%81%97%E3%81%A6Build%20only%20if%20.travis.yml%20is%20present%E3%82%92on%E3%81%AB%E3%80%81travis..." class="popup">
+	          <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/&amp;title=iOS%E3%82%A2%E3%83%97%E3%83%AA%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8ASDK%E3%82%92%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%81%8B%E3%82%89%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B%E3%82%AF%E3%83%A9%E3%82%B9%E8%A8%AD%E8%A8%88(%E3%83%90%E3%83%8A%E3%83%BC%2C%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A)&amp;summary=%E6%A6%82%E8%A6%81%20iOS%E3%82%A2%E3%83%97%E3%83%AA%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8ASDK%E3%82%92%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E7%B5%8C%E7%94%B1%E3%81%A7%E8%A1%A8%E7%A4%BA%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E3%82%92%E8%A1%8C%E3%81%A3%E3%81%9F%E9%9A%9B%E3%81%AE%E3%83%A1%E3%83%A2%20%E5%AF%BE%E8%B1%A1%E3%81%AF%E3%83%90%E3%83%8A%E3%83%BC%E5%BA%83%E5%91%8A%E3%80%81%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A%20%E3%82%84%E3%82%8A%E3%81%9F%E3%81%84%E3%81%93%E3%81%A8%20%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8A%E3%83%97%E3%83%A9%E3%83%83%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%97%E3%81%9F%E3%81%84%20%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%81%8B%E3%82%89%E8%A1%A8%E7%A4%BA%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E5%BA%83%E5%91%8A%E3%83%97%E3%83%A9%E3%83%83%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E3%82%92%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E3%81%9F%E3%81%84%20%E5%AF%BE%E8%B1%A1%E3%81%AE%E5%BA%83%E5%91%8A%E3%83%97%E3%83%A9%E3%83%83%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%20Fluct%20AMoAd%20adstir%20Adcrops%20AdGeneration%20%E3%83%90%E3%83%8A%E3%83%BC%E5%BA%83%E5%91%8A%E3%81%A8%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%20%E3%83%90%E3%83%8A%E3%83%BC%E5%BA%83%E5%91%8A%20=&gt;%20%E3%82%B5%E3%82%A4%E3%82%BA%E3%81%8C%E7%AB%AF%E6%9C%AB%E6%A8%AA%E5%B9%85%20*%20%E5%A4%A7%E4%BD%9344?%20%E3%81%AE%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E5%90%91%E3%81%91%E5%BA%83%E5%91%8A%20%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A%20=&gt;%20%E3%81%9D%E3%81%AE%E5%90%8D%E3%81%AE%E9%80%9A%E3%82%8A%E6%AD%A3%E6%96%B9%E5%BD%A2%E3%82%B5%E3%82%A4%E3%82%BA%E3%81%AE%E5%BA%83%E5%91%8A%E3%80%82%20%E3%81%82%E3%81%BE%E3%82%8A%E9%A6%B4%E6%9F%93%E3%81%BF%E3%81%AE%E3%81%AA%E3%81%84%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A%E3%81%A0%E3%81%A3%E3%81%9F%E3%81%8C%E5%90%84SDK%E3%81%A8%E3%82%82%E3%81%AB%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E6%96%B9%E6%B3%95%E3%81%AF%E3%83%90%E3%83%8A%E3%83%BC%E5%BA%83%E5%91%8A%E3%81%A8%E5%90%8C%E3%81%98%E3%81%A7%E3%80%81%E8%A1%A8%E7%A4%BA%E3%82%B5%E3%82%A4%E3%82%BA%E3%82%92%E5%A4%89%E3%81%88%E3%81%A6%E3%82%84%E3%82%8C%E3%81%B0%E3%82%88%E3%81%84%E3%81%A0%E3%81%91%E3%81%AE%E5%AE%9F%E8%A3%85%E3%81%8C%E5%A4%9A%E3%81%8B%E3%81%A3%E3%81%9F%20%E2%80%BB%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%82%B9%E3%83%86%E3%82%A3%E3%82%B7%E3%83%A3%E3%83%AB%E3%80%81%E3%83%8D%E3%82%A4%E3%83%86%E3%82%A3%E3%83%96%E3%81%AF%E3%81%BE%E3%81%9F%E5%88%A5%E8%A8%98%E4%BA%8B%E3%81%AB%E3%81%A6%20%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E5%81%B4%20%E5%BA%83%E5%91%8AAPI%E3%81%AE%E8%A8%AD%E8%A8%88%20%E3%82%A2%E3%83%97%E3%83%AA%E5%81%B4%E3%81%A7%E8%A1%A8%E7%A4%BA%E3%81%AE%E5%88%87%E3%82%8A%E5%88%86%E3%81%91%E3%83%BB%E5%BA%83%E5%91%8A%E3%81%AE%E5%88%87%E3%82%8A%E5%88%86%E3%81%91%E3%82%92%E8%A1%8C%E3%81%AA%E3%81%86%E3%81%9F%E3%82%81%E3%81%AEAPI%20%E3%83%AC%E3%82%B9%E3%83%9D%E3%83%B3%E3%82%B9%20%E3%83%AC%E3%82%B9%E3%83%9D%E3%83%B3%E3%82%B9%E7%AD%89%E3%81%AE%E6%83%85%E5%A0%B1%E3%81%AF%E4%BB%A5%E4%B8%8B%E3%83%AA%E3%83%B3%E3%82%AF%E5%85%88%E3%82%92%E5%8F%82%E7%85%A7%20http://docs.sample321.apiary.io/#reference/0/ads/ads%20%E2%80%BB%20apiary.io%E3%81%A7%E5%AE%9F%E9%A8%93%E7%9A%84%E3%81%AB%E4%BD%9C%E6%88%90%20%E3%83%A2%E3%83%83%E3%82%AFAPI%20%E4%BB%A5%E4%B8%8B%E3%81%AEURL%E3%81%A7API%E3%83%AC%E3%82%B9%E3%83%9D%E3%83%B3%E3%82%B9%E3%81%AE%E7%A2%BA%E8%AA%8D%E5%8F%AF%E8%83%BD%20%E3%83%AC%E3%82%B9%E3%83%9D%E3%83%B3%E3%82%B9%E3%81%AE%20ads%20%E3%81%AF%E3%80%81%E5%BA%83%E5%91%8A%E4%BD%8D%E7%BD%AE%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%99%E3%82%8B%E3%82%AD%E3%83%BC%E5%90%8D%E3%81%A8%E8%A8%AD%E5%AE%9A%E5%80%A4%E3%81%AE%E3%83%9A%E3%82%A2%E3%83%AA%E3%82%B9%E3%83%88(Object)%E3%81%A8%E3%81%99%E3%82%8B%20http..." class="popup">
 	              <span class="icon">
 	                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 	                      <path d="M25.424,15.887v8.447h-4.896v-7.882c0-1.979-0.709-3.331-2.48-3.331c-1.354,0-2.158,0.911-2.514,1.803 c-0.129,0.315-0.162,0.753-0.162,1.194v8.216h-4.899c0,0,0.066-13.349,0-14.731h4.899v2.088c-0.01,0.016-0.023,0.032-0.033,0.048 h0.033V11.69c0.65-1.002,1.812-2.435,4.414-2.435C23.008,9.254,25.424,11.361,25.424,15.887z M5.348,2.501 c-1.676,0-2.772,1.092-2.772,2.539c0,1.421,1.066,2.538,2.717,2.546h0.032c1.709,0,2.771-1.132,2.771-2.546 C8.054,3.593,7.019,2.501,5.343,2.501H5.348z M2.867,24.334h4.897V9.603H2.867V24.334z"></path>
@@ -173,7 +247,7 @@
 	      </li>
 	      <li class="tumblr">
 						<script>
-							document.write('<a href="http://www.tumblr.com/share?v=3&amp;u=' + encodeURIComponent('http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/') + '&amp;t=iOS%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6%E5%87%BA%E3%81%99%E6%89%8B%E9%A0%86%E3%81%A8PR%E6%96%B9%E6%B3%95" class="popup">');
+							document.write('<a href="http://www.tumblr.com/share?v=3&amp;u=' + encodeURIComponent('http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/') + '&amp;t=iOS%E3%82%A2%E3%83%97%E3%83%AA%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8ASDK%E3%82%92%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%81%8B%E3%82%89%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B%E3%82%AF%E3%83%A9%E3%82%B9%E8%A8%AD%E8%A8%88(%E3%83%90%E3%83%8A%E3%83%BC%2C%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A)" class="popup">');
 						</script>
 	              <span class="icon">
 	                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
@@ -184,7 +258,7 @@
 	          <script>document.write('</a>');</script>
 	      </li>
 	      <li class="reddit">
-	          <a href="http://www.reddit.com/submit?url=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/">
+	          <a href="http://www.reddit.com/submit?url=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/">
 	              <span class="icon">
 	                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 												<g>
@@ -199,7 +273,7 @@
 	          </a>
 	      </li>
 	      <li class="googleplus">
-	          <a href="https://plus.google.com/share?url=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/" class="popup">
+	          <a href="https://plus.google.com/share?url=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/" class="popup">
 	              <span class="icon">
 	                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
 	                      <g>
@@ -214,11 +288,11 @@
 	      <li class="pinterest">
 	          <script>
 							var imgurl = "http://localhost:2368";
-							var firstimg = document.getElementsByClassName("post tag-ios tag-travis tag-cocoapods")[0].getElementsByTagName("img")[0];
+							var firstimg = document.getElementsByClassName("post tag-ios tag-objc")[0].getElementsByTagName("img")[0];
 							if (firstimg !== undefined) {
 								imgurl = firstimg.src;
 							} 
-							document.write('<a href="http://pinterest.com/pin/create/button/?url=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/&amp;media=' + imgurl + '&amp;description=iOS%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8%E3%81%97%E3%81%A6%E5%87%BA%E3%81%99%E6%89%8B%E9%A0%86%E3%81%A8PR%E6%96%B9%E6%B3%95" class="popup">');
+							document.write('<a href="http://pinterest.com/pin/create/button/?url=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/&amp;media=' + imgurl + '&amp;description=iOS%E3%82%A2%E3%83%97%E3%83%AA%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E5%BA%83%E5%91%8ASDK%E3%82%92%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%81%8B%E3%82%89%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B%E3%82%AF%E3%83%A9%E3%82%B9%E8%A8%AD%E8%A8%88(%E3%83%90%E3%83%8A%E3%83%BC%2C%E3%83%AC%E3%82%AF%E3%82%BF%E3%83%B3%E3%82%B0%E3%83%AB%E5%BA%83%E5%91%8A)" class="popup">');
 						</script>
 	              <span class="icon">
 	                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewbox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
@@ -229,7 +303,7 @@
 	          <script>document.write('</a>');</script>
 	      </li>
 	      <li class="pocket">
-	          <a href="https://getpocket.com/save?url=http://localhost:2368/iospuroziekutoworaiburaritositechu-sushou-shun-toprfang-fa/" class="popup">
+	          <a href="https://getpocket.com/save?url=http://localhost:2368/iosapuridefu-shu-noguang-gao-sdkwoguan-li-hua-mian-karaqie-riti-eke-neng-nisurukurasushe-ji-banarekutanguruguang-gao/" class="popup">
 	              <span class="icon">
 	                  <svg width="32px" height="28px" viewbox="0 0 32 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
 	                      <path d="M28.7817528,0.00172488695 C30.8117487,0.00431221738 31.9749312,1.12074529 31.9644402,3.10781507 C31.942147,6.67703739 32.1336065,10.2669583 31.8057648,13.8090137 C30.7147076,25.5813672 17.2181194,31.8996281 7.20714461,25.3808491 C2.71833574,22.4571656 0.196577202,18.3122624 0.0549495772,12.9357897 C-0.0342233715,9.5774348 0.00642900214,6.21519891 0.0300336062,2.85555035 C0.0405245414,1.1129833 1.21157517,0.0146615391 3.01995012,0.00819321302 C7.34746087,-0.00603710433 11.6775944,0.00431221738 16.0064164,0.00172488695 C20.2644248,0.00172488695 24.5237444,-0.00215610869 28.7817528,0.00172488695 L28.7817528,0.00172488695 Z M8.64885184,7.85611511 C7.38773662,7.99113854 6.66148108,8.42606978 6.29310958,9.33228474 C5.90114134,10.2969233 6.17774769,11.1421181 6.89875951,11.8276216 C9.35282156,14.161969 11.8108164,16.4924215 14.2976518,18.7943114 C15.3844131,19.7966007 16.5354102,19.7836177 17.6116843,18.7813283 C20.0185529,16.5495467 22.4070683,14.2982907 24.7824746,12.0327533 C25.9845979,10.8850542 26.1012707,9.56468083 25.1469132,8.60653379 C24.1361858,7.59255976 22.8449191,7.6743528 21.5890476,8.85191291 C19.9936451,10.3488554 18.3680912,11.8172352 16.8395462,13.3777945 C16.1342655,14.093159 15.7200114,14.0048744 15.0566806,13.3440386 C13.4599671,11.7484252 11.8081945,10.2060421 10.1262706,8.70001155 C9.65564653,8.27936164 9.00411403,8.05345704 8.64885184,7.85611511 L8.64885184,7.85611511 L8.64885184,7.85611511 Z"></path>
@@ -247,7 +321,7 @@
   	<div id="disqus_thread"></div>
   	<script type="text/javascript">
   	    var disqus_shortname = 'example'; // required: replace example with your shortname
-  	    var disqus_identifier = '12';
+  	    var disqus_identifier = '17';
   	    (function() {
   	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
   	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
