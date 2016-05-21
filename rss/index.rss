@@ -1,4 +1,148 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Thu, 19 May 2016 15:34:57 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 21 May 2016 16:05:28 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>UnityからOANDA APIを叩いて為替レートを取得する</title><description>&lt;p&gt;伊勢志摩サミット,6月FOMC,Brexitの行方,ゴールドの買い時, 色々気になる今日この頃ですね。&lt;/p&gt;
+
+&lt;p&gt;そんなこんなでシストレで有名な&lt;a href="http://developer.oanda.com/docs/jp/"&gt;OANDAが公開している為替トレーディング用API&lt;/a&gt;を、学習がてらUnityから叩いてみました。&lt;/p&gt;
+
+&lt;h2 id=""&gt;準備&lt;/h2&gt;
+
+&lt;h3 id="oandaapi"&gt;OANDA APIを叩けるようにする&lt;/h3&gt;
+
+&lt;p&gt;OANDAでデモ口座(無料)を作成してトークンを取得すればSandbox環境を叩けるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;手順&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.oanda.jp/api/"&gt;http://www.oanda.jp/api/&lt;/a&gt; にアクセスしてデモ口座を開設&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.oanda.jp/trade/practice/login.do?success"&gt;https://www.oanda.jp/trade/practice/login.do?success&lt;/a&gt; にアクセスしてログイン&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;APIアクセスの管理&lt;/code&gt; から personal access token を発行&lt;/p&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://developer.oanda.com/rest-live/console/"&gt;APIの動作確認ツール&lt;/a&gt;で疎通の確認を行なう&lt;/p&gt;
+
+&lt;p&gt;一番わかりやすいので &lt;code&gt;/accounts&lt;/code&gt; を選択&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://cloud.githubusercontent.com/assets/518782/15449113/820b9e68-1faf-11e6-89aa-7819fb251ae8.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;リクエストヘッダーに &lt;code&gt;personal access token&lt;/code&gt; を設定して叩く&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://cloud.githubusercontent.com/assets/518782/15449119/9b9acb1a-1faf-11e6-821d-14f1578db239.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;これで200が返ってくれば開通済みです。&lt;/p&gt;
+
+&lt;p&gt;※詳しくは &lt;a href="http://www.oanda.jp/api/"&gt;http://www.oanda.jp/api/&lt;/a&gt; ページ下部に記載されている「お手続きの流れ」を確認&lt;/p&gt;
+
+&lt;h3 id="unity"&gt;Unity側準備&lt;/h3&gt;
+
+&lt;p&gt;今回は叩けるかどうかを確認したいだけなので、シーン上に空のGameObjectを生成し実装対象のスクリプトをアタッチしておきます。&lt;/p&gt;
+
+&lt;p&gt;それと、Jsonのパース用に&lt;a href="http://wiki.unity3d.com/index.php/SimpleJSON"&gt;SimpleJSON&lt;/a&gt;をダウンロードしてpackageも追加しておきます。&lt;/p&gt;
+
+&lt;h2 id="api"&gt;APIを叩いてみる&lt;/h2&gt;
+
+&lt;p&gt;ユーロポンド,ドル円,豪ドルドルの現在レートを取得しようと思います。以下のエンドポイントを指定してGETで叩きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://api-fxpractice.oanda.com/v1/prices?instruments=EUR_GBP%2CUSD_JPY%2CAUD_USD&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;成功すれば以下のようなレスポンスが返ってきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  "prices": [
+    {
+      "instrument": "EUR_GBP",
+      "time": "2016-05-20T20:59:58.466984Z",
+      "bid": 0.77345,
+      "ask": 0.77445,
+      "status": "halted"
+    },
+    {
+      "instrument": "USD_JPY",
+      "time": "2016-05-20T20:59:58.466604Z",
+      "bid": 110.065,
+      "ask": 110.165,
+      "status": "halted"
+    },
+    {
+      "instrument": "AUD_USD",
+      "time": "2016-05-20T20:59:58.464942Z",
+      "bid": 0.72203,
+      "ask": 0.72242,
+      "status": "halted"
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実装していきます。&lt;/p&gt;
+
+&lt;p&gt;UnityWebRequest で エンドポイントを指定し、ヘッダーにアクセストークンを追加するだけの簡単なスクリプトです。&lt;/p&gt;
+
+&lt;p&gt;※コード内のトークンは適宜変更&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="cs"&gt;using UnityEngine;  
+using System.Collections;  
+using UnityEngine.Networking;  
+using UnityEngine.Experimental.Networking;  
+using System.Text;  
+using SimpleJSON;
+
+public class HTTPRequest : MonoBehaviour {
+
+    private JSONNode jsonData;
+    private string accessToken = "insert personal access token";
+
+    void Start () {
+        StartCoroutine(Fetch());
+    }
+
+    void Update () {
+
+    }
+
+    public IEnumerator Fetch() {
+        // ユーロポンド,ドル円,豪ドルドル を取得
+        string url = "https://api-fxpractice.oanda.com/v1/prices?instruments=EUR_GBP%2CUSD_JPY%2CAUD_USD";
+
+        using (UnityWebRequest request = UnityWebRequest.Get (url)) {
+
+            request.SetRequestHeader("Authorization","Bearer " + accessToken);
+
+            yield return request.Send ();
+
+            string jsonText = request.downloadHandler.text;
+
+            if (request.responseCode == 200) {
+                jsonData = JSONNode.Parse(jsonText);
+                // 銘柄名
+                string instrument = (string)jsonData["prices"][0]["instrument"];
+                // bid
+                string bid = (string)jsonData["prices"][0]["bid"];
+
+                Debug.Log ("Success");
+            } else {
+                Debug.Log ("Error");
+            }
+
+        };
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;デバッガで取得が確認できました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://cloud.githubusercontent.com/assets/518782/15449329/88a8795c-1fb5-11e6-95ad-e6369599b0b7.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;OANDA APIは &lt;a href="https://github.com/unageanu/jiji2"&gt;Jiji というオープンソースのシストレフレームワーク&lt;/a&gt;で使われていたり、日本語ドキュメント等もあったり色々面白そうです。&lt;/p&gt;
+
+&lt;p&gt;目指すは&lt;a href="http://8ninths.com/case-study/citi-holographic-workstation/"&gt;Cityが発表したHoloLensのアプリ&lt;/a&gt;のような為替トレード用アプリを作って役立てていければなと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://cloud.githubusercontent.com/assets/518782/15449357/6eb30d4a-1fb6-11e6-97bf-c1718dab6a19.png" alt=""&gt;&lt;/p&gt;</description><link>http://localhost:2368/unitykaraoanda-apiwokou-ku/</link><guid isPermaLink="false">04d8942f-0a0b-463c-9d76-7e5a8e98f4b0</guid><category>Unity</category><category>OANDA API</category><dc:creator>satoshin</dc:creator><pubDate>Sat, 21 May 2016 16:04:02 GMT</pubDate></item><item><title>iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
 
 &lt;p&gt;iOSアプリで複数の広告SDKをサーバー経由で表示の切り替えを行った際のメモ&lt;/p&gt;
 
