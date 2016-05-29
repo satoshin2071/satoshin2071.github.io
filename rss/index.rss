@@ -1,4 +1,62 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sat, 21 May 2016 16:05:28 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>UnityからOANDA APIを叩いて為替レートを取得する</title><description>&lt;p&gt;伊勢志摩サミット,6月FOMC,Brexitの行方,ゴールドの買い時, 色々気になる今日この頃ですね。&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SATOSHIN .NET</title><description>woohooo!!</description><link>http://localhost:2368/</link><generator>Ghost 0.5</generator><lastBuildDate>Sun, 29 May 2016 13:36:49 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>cocoapods-keysをSwiftのプロジェクトで利用する</title><description>&lt;h2 id=""&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;Swiftプロジェクトで&lt;code&gt;cocoapods-keys&lt;/code&gt;を利用してWebサービスのAPIキー等を管理するメモ&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/orta/cocoapods-keys"&gt;cocoapods-keysについてはこちら&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=""&gt;前提&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;bundlerインストール済み&lt;/li&gt;
+&lt;li&gt;Xcode 7.3.1&lt;/li&gt;
+&lt;li&gt;cocoapod 0.39.0&lt;/li&gt;
+&lt;li&gt;cocoapods-keys 1.0.0 (pod)&lt;/li&gt;
+&lt;li&gt;cocoapods-keys 1.6.1 (gemfile)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=""&gt;インストール&lt;/h2&gt;
+
+&lt;p&gt;リポジトリで cocoapods-keys を利用していることを明示したいのでGemfileで管理する&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;% cd SwiftyTumblrKit  //iOSアプリのプロジェクトルートディレクトリへ
+% touch Gemfile
+% vim Gemfile
+
+source 'https://rubygems.org'  
+gem 'cocoapods-keys', '1.6.1'
+
+% bundle install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="keyvalue"&gt;管理するkeyとvalueの追加&lt;/h2&gt;
+
+&lt;p&gt;Podfileに以下の文で適宜プロジェクト名とキー名を記載し &lt;code&gt;pod install&lt;/code&gt;を実行することで対話的にkey-valueを設定できる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Podfileに追加
+
+plugin 'cocoapods-keys', {  
+  :project =&amp;gt; "SwiftyTumblrKit",
+  :keys =&amp;gt; [
+    "consumerKey",
+    "secretKey"
+  ]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;※ &lt;code&gt;pod install&lt;/code&gt;実行時に &lt;code&gt;Keys (1.0.0)&lt;/code&gt;がインストールされなければもう一度&lt;code&gt;pod install&lt;/code&gt;を実行する必要があり&lt;/p&gt;
+
+&lt;h2 id="swift"&gt;Swiftプロジェクトでの利用方法&lt;/h2&gt;
+
+&lt;p&gt;Swiftから利用する場合は &lt;code&gt;import Keys&lt;/code&gt; を追記。&lt;/p&gt;
+
+&lt;p&gt;cocoapods-keysがソースファイルを生成してくれているので、&lt;code&gt;project名().key名()&lt;/code&gt;で呼び出しが可能。&lt;/p&gt;
+
+&lt;p&gt;今回の例ならば &lt;code&gt;SwiftytumblrkitKeys().consumerKey()&lt;/code&gt;  &lt;strong&gt;※プロジェクト名に注意&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;import Keys&lt;/code&gt; をXcodeの &lt;code&gt;⌘ + クリック&lt;/code&gt; でソースを追ってへッダーファイルを確認するとよい&lt;/p&gt;
+
+&lt;h2 id=""&gt;参考&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/orta/cocoapods-keys/blob/master/SWIFT_PROJECTS.md"&gt;https://github.com/orta/cocoapods-keys/blob/master/SWIFT_PROJECTS.md&lt;/a&gt;&lt;/p&gt;</description><link>http://localhost:2368/cocoapods-keyswoswiftnopuroziekutodeli-yong-suru/</link><guid isPermaLink="false">a9f5eb13-fe75-4a50-bf83-cf4fa83952c5</guid><category>Swift</category><category>cocoapods-keys</category><dc:creator>satoshin</dc:creator><pubDate>Sun, 29 May 2016 13:35:31 GMT</pubDate></item><item><title>UnityからOANDA APIを叩いて為替レートを取得する</title><description>&lt;p&gt;伊勢志摩サミット,6月FOMC,Brexitの行方,ゴールドの買い時, 色々気になる今日この頃ですね。&lt;/p&gt;
 
 &lt;p&gt;そんなこんなでシストレで有名な&lt;a href="http://developer.oanda.com/docs/jp/"&gt;OANDAが公開している為替トレーディング用API&lt;/a&gt;を、学習がてらUnityから叩いてみました。&lt;/p&gt;
 

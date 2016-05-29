@@ -9,7 +9,7 @@
 			<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet" type="text/css">
 			<link href="https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
-			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=dd7e48b9c2">
+			<link rel="stylesheet" type="text/css" href="../assets/styles/crisp.css?v=6625cc7ab9">
 	    <meta name="HandheldFriendly" content="True">
 	    <meta name="MobileOptimized" content="320">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
 				<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 				<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 			<![endif]-->
-				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=dd7e48b9c2">
+				<link rel="stylesheet" type="text/css" href="../assets/styles/rrssb.css?v=6625cc7ab9">
 	<meta property="og:title" content="iOSアプリで複数の広告SDKを管理画面から切り替え可能にするクラス設計(バナー,レクタングル広告)">
 	<meta property="og:type" content="article">
 	<meta property="og:description" content="概要 iOSアプリで複数の広告SDKをサーバー経由で表示の切り替えを行った際のメモ 対象はバナー広告、レクタングル広告 やりたいこと 複数の広告プラットフォームを表示したい 管理画面から表示している広告プラットフォームを切り替えたい 対象の広告プラットフォーム Fluct AMoAd adstir Adcrops AdGeneration バナー広告とレクタングル広告について バナー広告 =&gt; サイズが端末横幅 * 大体44? のよくあるモバイル向け広告 レクタングル広告 =&gt; その名の通り正方形サイズの広告。 あまり馴染みのないレクタングル広告だったが各SDKともに呼び出し方法はバナー広告と同じで、表示サイズを変えてやればよいだけの実装が多かった ※インタースティシャル、ネイティブはまた別記事にて サーバー側 広告APIの設計 アプリ側で表示の切り分け・広告の切り分けを行なうためのAPI レスポンス レスポンス等の情報は以下リンク先を参照 http://docs.sample321.apiary.io/#reference/0/ads/ads ※ apiary.ioで実験的に作成 モックAPI 以下のURLでAPIレスポンスの確認可能 レスポンスの ads は、広告位置に対応するキー名と設定値のペアリスト(Object)とする http...">
@@ -315,7 +315,7 @@ viewDidLoadあたりでキーを指定してAdConfigManagerからAdConfigを取�
 	  </ul>	
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="../assets/js/rrssb.min.js?v=dd7e48b9c2"></script>
+	<script src="../assets/js/rrssb.min.js?v=6625cc7ab9"></script>
   <!--
   <div id="comments">
   	<div id="disqus_thread"></div>
@@ -337,7 +337,7 @@ viewDidLoadあたりでキーを指定してAdConfigManagerからAdConfigを取�
 		<footer id="footer">
 			<section id="footer-message">© 2016 SATOSHIN .NET. All rights reserved. Powered by <a href="http://ghost.org" target="_blank">Ghost</a>. <a href="https://github.com/kathyqian/crisp-ghost-theme" target="_blank">Crisp</a> theme by <a href="http://kathyqian.com" target="_blank">Kathy Qian</a>.</section>
 		</footer>
-	<script src="../public/jquery.js?v=dd7e48b9c2"></script>
+	<script src="../public/jquery.js?v=6625cc7ab9"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	</body>
